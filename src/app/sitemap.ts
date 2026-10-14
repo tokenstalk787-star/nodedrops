@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const opportunities = await prisma.opportunity.findMany({
     where: {
       isDemo: false,
+      NOT: { slug: "example-testnet" },
     },
     select: {
       slug: true,
