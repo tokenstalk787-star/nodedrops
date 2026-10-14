@@ -165,8 +165,11 @@ await check("unknown opportunity API slug returns 404", async () => {
   await expectStatus("/api/opportunities/nodedrops-smoke-test-missing-slug", 404);
 });
 
-await check("invalid opportunity API slug is rejected", async () => {
-  await expectStatus("/api/opportunities/INVALID_SLUG", 400);
+await check("invalid opportunity API slug is rejected without caching the error", async () => {
+  const response = await expectStatus("/api/opportunities/INVALID_SLUG", 400);
+  if (response.headers.get("cache-control") !== "no-store") {
+    throw new Error("invalid-slug error response must use Cache-Control: no-store");
+  }
 });
 
 await check("opportunity write endpoint rejects unauthenticated requests", async () => {
