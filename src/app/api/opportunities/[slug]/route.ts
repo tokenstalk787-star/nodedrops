@@ -21,7 +21,10 @@ export async function GET(
     ) {
       return NextResponse.json(
         { error: "Invalid opportunity slug." },
-        { status: 400 },
+        {
+          status: 400,
+          headers: { "Cache-Control": "no-store" },
+        },
       );
     }
 
@@ -78,10 +81,15 @@ export async function GET(
         headers: { "Cache-Control": "no-store" },
       },
     );
-  } catch {
+  } catch (error) {
+    console.error("GET /api/opportunities/[slug] failed:", error);
+
     return NextResponse.json(
       { error: "Unable to retrieve this opportunity." },
-      { status: 500 },
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store" },
+      },
     );
   }
 }
