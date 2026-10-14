@@ -51,9 +51,11 @@ Requirements: a supported Node.js LTS release, pnpm, and access to a MySQL-compa
 ## Useful commands
 
 ```bash
-pnpm exec prisma generate
-pnpm exec prisma validate
-pnpm exec tsc --noEmit
+pnpm db:generate
+pnpm db:validate
+pnpm db:migrate:deploy
+pnpm db:seed
+pnpm typecheck
 pnpm lint
 pnpm build
 pnpm smoke
