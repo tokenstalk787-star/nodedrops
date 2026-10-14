@@ -86,7 +86,7 @@ Never label an incentive confirmed based only on speculation, social rumors, or 
 - `GET /api/health` — service/database health check.
 - `GET /api/opportunities` — public opportunity directory with filtering and pagination.
 - `GET /api/opportunities/:slug` — one public listing.
-- `POST /api/opportunities` — protected listing creation/update endpoint; requires an `Authorization: Bearer <ADMIN_API_KEY>` header.
+- `POST /api/opportunities` — protected listing creation endpoint; requires an `Authorization: Bearer <ADMIN_API_KEY>` header.
 
 Public reads must not expose demo records. Write access should remain disabled when `ADMIN_API_KEY` is missing or shorter than the minimum required length. Keep the key server-side and never send it to browser code.
 
