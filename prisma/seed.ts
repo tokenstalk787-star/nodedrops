@@ -65,6 +65,24 @@ const opportunities = [
     isDemo: false,
   },
   {
+    name: "Asentum Incentivized Testnet",
+    slug: "asentum-incentivized-testnet",
+    summary:
+      "Asentum's post-quantum, JavaScript-native blockchain has an active incentivized testnet with XP-based participation and validator rewards described by the project. Review the current validator bond, hardware requirements, campaign rules, and reward mechanics before committing resources.",
+    category: "Node",
+    network: "Asentum",
+    status: OpportunityStatus.ACTIVE,
+    incentiveStatus: IncentiveStatus.CONFIRMED,
+    difficulty: "Intermediate",
+    estimatedCostUsd: null,
+    officialUrl: "https://www.asentum.com/",
+    lastVerifiedAt: new Date("2026-10-14T00:00:00.000Z"),
+    sourceUrl: "https://www.asentum.com/roadmap",
+    verificationNotes:
+      "The official Asentum website and roadmap state that the incentivized testnet has been live since September 17, 2026, with XP-based activity and validator rewards. The site describes rewards for blocks signed, but this listing does not promise any specific ASE amount, token value, airdrop allocation, eligibility, or profit. Verify the current bond and operator steps in official documentation; never share private keys or seed phrases.",
+    isDemo: false,
+  },
+  {
     name: "Demo EVM Testnet",
     slug: "demo-evm-testnet",
     summary:
