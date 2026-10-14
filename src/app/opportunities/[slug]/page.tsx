@@ -327,6 +327,15 @@ async function OpportunityDetails({ params }: PageProps) {
             >
               Explore opportunities
             </Link>
+
+            <a
+              href="https://github.com/tokenstalk787-star/nodedrops/issues/new?template=listing-correction.yml"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-xl border border-white/15 px-5 py-3 text-sm font-medium transition hover:border-emerald-400/30 hover:bg-white/5"
+            >
+              Report a correction ↗
+            </a>
           </div>
         </div>
       </section>
