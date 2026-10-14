@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "smoke": "node scripts/smoke-test.mjs"
+    "smoke": "node scripts/smoke-test.mjs",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
