@@ -39,6 +39,9 @@ importers:
       eslint-config-next:
         specifier: 16.4.0
         version: 16.4.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
+      dotenv:
+        specifier: 16.6.1
+        version: 16.6.1
       prisma:
         specifier: 6.19.3
         version: 6.19.3(typescript@5.9.3)
