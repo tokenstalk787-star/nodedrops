@@ -368,14 +368,17 @@ export async function generateMetadata({
 
   if (!opportunity) {
     return {
-      title: "Opportunity Not Found | NodeDrops.xyz",
+      title: "Opportunity Not Found",
       robots: { index: false, follow: false },
     };
   }
 
   return {
-    title: `${opportunity.name} | NodeDrops.xyz`,
+    title: opportunity.name,
     description: opportunity.summary,
+    alternates: {
+      canonical: `/opportunities/${encodeURIComponent(slug)}`,
+    },
     robots: { index: true, follow: true },
   };
 }
