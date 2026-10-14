@@ -223,6 +223,15 @@ export async function GET(request: NextRequest) {
       return jsonError("includeDemo must be true or false.", 400);
     }
 
+    // Demo records may be useful locally, but must never leak through the
+    // public production API, even when a caller supplies includeDemo=true.
+    if (
+      process.env.NODE_ENV === "production" &&
+      includeDemoParam === "true"
+    ) {
+      return jsonError("Demo records are not available in production.", 400);
+    }
+
     const page = parsePositiveInteger(params.get("page"), 1);
     const requestedLimit = parsePositiveInteger(
       params.get("limit"),
@@ -256,6 +265,7 @@ export async function GET(request: NextRequest) {
 
     const where: Prisma.OpportunityWhereInput = {
       isDemo: includeDemoParam === "true" ? undefined : false,
+      NOT: { slug: "example-testnet" },
     };
 
     if (query) {
