@@ -31,6 +31,7 @@ export default async function HomePage() {
           ...realOpportunityFilter,
           lastVerifiedAt: { not: null },
           sourceUrl: { not: null },
+          verificationNotes: { not: null },
         },
       }),
       prisma.opportunity.findMany({
