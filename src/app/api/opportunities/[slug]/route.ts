@@ -1,6 +1,5 @@
 
-import { NextResponse } from "next/server";
-import { connection } from "next/server";
+import { connection, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
@@ -11,9 +10,8 @@ export async function GET(
   _request: Request,
   { params }: RouteContext,
 ) {
-  await connection();
-
   try {
+    await connection();
     const { slug } = await params;
 
     if (
