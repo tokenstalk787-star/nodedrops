@@ -70,6 +70,56 @@ await check("invalid status filter is rejected", async () => {
   await expectStatus("/api/opportunities?status=NOT_A_STATUS", 400);
 });
 
+await check("incentive status filter only returns matching listings", async () => {
+  const response = await expectStatus(
+    "/api/opportunities?incentiveStatus=POTENTIAL&limit=50",
+    200,
+  );
+  const body = await response.json();
+  if (
+    !Array.isArray(body.data) ||
+    body.data.some((item) => item.incentiveStatus !== "POTENTIAL")
+  ) {
+    throw new Error("incentive status filter returned a non-matching listing");
+  }
+});
+
+await check("invalid incentive status is rejected", async () => {
+  await expectStatus("/api/opportunities?incentiveStatus=NOT_A_STATUS", 400);
+});
+
+await check("opportunity status filter only returns matching listings", async () => {
+  const response = await expectStatus(
+    "/api/opportunities?status=ACTIVE&limit=50",
+    200,
+  );
+  const body = await response.json();
+  if (
+    !Array.isArray(body.data) ||
+    body.data.some((item) => item.status !== "ACTIVE")
+  ) {
+    throw new Error("opportunity status filter returned a non-matching listing");
+  }
+});
+
+await check("explicitly disabling demo records keeps them out of public results", async () => {
+  const response = await expectStatus(
+    "/api/opportunities?includeDemo=false&limit=50",
+    200,
+  );
+  const body = await response.json();
+  if (
+    !Array.isArray(body.data) ||
+    body.data.some((item) => item.isDemo === true || item.slug === "example-testnet")
+  ) {
+    throw new Error("demo or legacy listing leaked into public results");
+  }
+});
+
+await check("invalid includeDemo value is rejected", async () => {
+  await expectStatus("/api/opportunities?includeDemo=yes", 400);
+});
+
 await check("invalid pagination is rejected", async () => {
   await expectStatus("/api/opportunities?page=0", 400);
 });
