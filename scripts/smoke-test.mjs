@@ -124,6 +124,20 @@ await check("invalid pagination is rejected", async () => {
   await expectStatus("/api/opportunities?page=0", 400);
 });
 
+await check("oversized search query is rejected", async () => {
+  const query = "x".repeat(101);
+  await expectStatus(`/api/opportunities?q=${query}`, 400);
+});
+
+await check("oversized category filter is rejected", async () => {
+  const category = "x".repeat(81);
+  await expectStatus(`/api/opportunities?category=${category}`, 400);
+});
+
+await check("unreasonably large page number is rejected", async () => {
+  await expectStatus("/api/opportunities?page=9007199254740991", 400);
+});
+
 await check("API caps excessive page size", async () => {
   const response = await expectStatus("/api/opportunities?page=1&limit=999", 200);
   const body = await response.json();
