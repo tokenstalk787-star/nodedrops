@@ -58,6 +58,30 @@ await check("opportunity API returns paginated JSON", async () => {
   firstSlug = body.data[0]?.slug ?? null;
 });
 
+await check("category filter only returns matching listings", async () => {
+  const response = await expectStatus("/api/opportunities?category=Node&limit=50", 200);
+  const body = await response.json();
+  if (!Array.isArray(body.data) || body.data.some((item) => item.category !== "Node")) {
+    throw new Error("category filter returned a non-matching listing");
+  }
+});
+
+await check("invalid status filter is rejected", async () => {
+  await expectStatus("/api/opportunities?status=NOT_A_STATUS", 400);
+});
+
+await check("invalid pagination is rejected", async () => {
+  await expectStatus("/api/opportunities?page=0", 400);
+});
+
+await check("API caps excessive page size", async () => {
+  const response = await expectStatus("/api/opportunities?page=1&limit=999", 200);
+  const body = await response.json();
+  if (body.pagination?.limit !== 50 || body.data.length > 50) {
+    throw new Error("API did not enforce the maximum page size of 50");
+  }
+});
+
 await check("opportunity directory page responds", async () => {
   await expectStatus("/opportunities", 200);
 });
