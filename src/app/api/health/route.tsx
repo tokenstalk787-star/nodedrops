@@ -1,12 +1,10 @@
-
-import { NextResponse } from "next/server";
-import { connection } from "next/server";
+import { connection, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  await connection();
-
   try {
+    // Avoid caching this request and ensure the health check runs dynamically.
+    await connection();
     await prisma.$queryRaw`SELECT 1`;
 
     return NextResponse.json(
