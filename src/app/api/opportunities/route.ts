@@ -189,9 +189,8 @@ function parseCost(
  * q, category, status, incentiveStatus, includeDemo, page, limit
  */
 export async function GET(request: NextRequest) {
-  await connection();
-
   try {
+    await connection();
     const params = request.nextUrl.searchParams;
 
     const query = params.get("q")?.trim() ?? "";
@@ -331,13 +330,12 @@ export async function GET(request: NextRequest) {
  * Requires Authorization: Bearer <ADMIN_API_KEY>
  */
 export async function POST(request: NextRequest) {
-  await connection();
-
   if (!hasValidAdminKey(request)) {
     return jsonError("Unauthorized.", 401);
   }
 
   try {
+    await connection();
     const contentType =
       request.headers.get("content-type")?.toLowerCase() ?? "";
 
