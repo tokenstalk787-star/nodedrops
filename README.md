@@ -92,6 +92,8 @@ Each public listing should include a meaningful summary, current status, incenti
 
 Never label an incentive confirmed based only on speculation, social rumors, or an unsupported token-price estimate.
 
+Before publishing or changing an opportunity, follow the [Opportunity Listing Review Checklist](docs/OPPORTUNITY_REVIEW_CHECKLIST.md) so source evidence, incentive labels, costs, and uncertainty are recorded consistently.
+
 ## API overview
 
 - `GET /api/health` — service/database health check.
