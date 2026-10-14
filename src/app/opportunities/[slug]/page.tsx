@@ -95,8 +95,12 @@ function DetailLoading() {
 async function OpportunityDetails({ params }: PageProps) {
   const { slug } = await params;
 
-  const opportunity = await prisma.opportunity.findUnique({
-    where: { slug },
+  const opportunity = await prisma.opportunity.findFirst({
+    where: {
+      slug,
+      isDemo: false,
+      NOT: { slug: "example-testnet" },
+    },
   });
 
   if (!opportunity) {
@@ -341,12 +345,15 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  const opportunity = await prisma.opportunity.findUnique({
-    where: { slug },
+  const opportunity = await prisma.opportunity.findFirst({
+    where: {
+      slug,
+      isDemo: false,
+      NOT: { slug: "example-testnet" },
+    },
     select: {
       name: true,
       summary: true,
-      isDemo: true,
     },
   });
 
@@ -359,12 +366,8 @@ export async function generateMetadata({
 
   return {
     title: `${opportunity.name} | NodeDrops.xyz`,
-    description: opportunity.isDemo
-      ? `Demo listing for testing NodeDrops. ${opportunity.summary}`
-      : opportunity.summary,
-    robots: opportunity.isDemo
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    description: opportunity.summary,
+    robots: { index: true, follow: true },
   };
 }
 
