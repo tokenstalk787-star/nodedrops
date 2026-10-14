@@ -47,6 +47,24 @@ const opportunities = [
     isDemo: false,
   },
   {
+    name: "Quip Network Testnet",
+    slug: "quip-network-testnet",
+    summary:
+      "Quip Network describes a public testnet for testing quantum-resistant signatures and a distributed quantum-compute marketplace. Review the latest official requirements and supported hardware before participating; reward eligibility and value are not guaranteed.",
+    category: "Testnet",
+    network: "Quip Network",
+    status: OpportunityStatus.ACTIVE,
+    incentiveStatus: IncentiveStatus.POTENTIAL,
+    difficulty: "Intermediate",
+    estimatedCostUsd: null,
+    officialUrl: "https://quip.network/",
+    lastVerifiedAt: new Date("2026-10-14T00:00:00.000Z"),
+    sourceUrl: "https://quip.network/blog/testnet-is-live",
+    verificationNotes:
+      "Quip Network's official testnet post describes public testing and reward participation, with an October 2026 update noting changes to supported networks and signatures and an independent audit publication. The post does not establish an individual's reward amount or eligibility. Confirm current tasks, costs, security requirements, and program terms before participating.",
+    isDemo: false,
+  },
+  {
     name: "Demo EVM Testnet",
     slug: "demo-evm-testnet",
     summary:
