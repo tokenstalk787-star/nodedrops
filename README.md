@@ -37,9 +37,9 @@ Requirements: a supported Node.js LTS release, pnpm, and access to a MySQL-compa
    ```
 6. Seed the configured database with the current curated records:
    ```bash
-   pnpm exec prisma db seed
+   pnpm exec tsx prisma/seed.ts
    ```
-   The seed script upserts records by slug, so rerunning it updates those records rather than creating duplicates. It also inserts clearly marked demo records for development; demo records are excluded from public directory/API results.
+   The seed script is run directly with `tsx` (it does not depend on Prisma's optional seed-command configuration). It upserts records by slug, so rerunning it updates those records rather than creating duplicates. It also inserts clearly marked demo records for development; demo records are excluded from public directory/API results.
 7. Start the development server:
    ```bash
    pnpm dev
