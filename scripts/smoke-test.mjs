@@ -62,8 +62,11 @@ await check("opportunity directory page responds", async () => {
 await check("sitemap responds with XML", async () => {
   const response = await expectStatus("/sitemap.xml", 200);
   const xml = await response.text();
-  if (!xml.includes("<urlset") || !xml.includes("https://nodedrops.xyz")) {
-    throw new Error("sitemap XML is missing expected URL set or canonical site");
+  const expectedCanonical = (
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://nodedrops.xyz"
+  ).replace(/\\/+$/, "");
+  if (!xml.includes("<urlset") || !xml.includes(expectedCanonical)) {
+    throw new Error("sitemap XML is missing the expected URL set or canonical site");
   }
 });
 
