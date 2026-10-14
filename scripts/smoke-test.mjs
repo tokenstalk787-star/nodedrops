@@ -52,6 +52,9 @@ await check("opportunity API returns paginated JSON", async () => {
   if (!Number.isInteger(body.pagination.total) || body.pagination.total < 0) {
     throw new Error("pagination.total must be a non-negative integer");
   }
+  if (body.data.some((item) => item.isDemo === true || item.slug === "example-testnet")) {
+    throw new Error("public results must not include demo or legacy example listings");
+  }
   firstSlug = body.data[0]?.slug ?? null;
 });
 
@@ -76,6 +79,17 @@ await check("unknown opportunity API slug returns 404", async () => {
 
 await check("invalid opportunity API slug is rejected", async () => {
   await expectStatus("/api/opportunities/INVALID_SLUG", 400);
+});
+
+await check("opportunity write endpoint rejects unauthenticated requests", async () => {
+  const response = await fetch(new URL("/api/opportunities", baseUrl), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
+  });
+  if (response.status !== 401) {
+    throw new Error(`expected HTTP 401, received ${response.status}`);
+  }
 });
 
 await check("first listed opportunity detail responds", async () => {
