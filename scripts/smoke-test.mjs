@@ -178,6 +178,29 @@ await check("methodology page responds with verification guidance", async () => 
   }
 });
 
+await check("homepage includes baseline browser security headers", async () => {
+  const response = await expectStatus("/", 200);
+  const expectedHeaders = [
+    ["x-content-type-options", "nosniff"],
+    ["x-frame-options", "DENY"],
+    ["referrer-policy", "strict-origin-when-cross-origin"],
+  ];
+
+  for (const [name, expected] of expectedHeaders) {
+    if (response.headers.get(name)?.toLowerCase() !== expected.toLowerCase()) {
+      throw new Error(`missing or incorrect ${name} security header`);
+    }
+  }
+});
+
+await check("robots.txt blocks API crawling", async () => {
+  const response = await expectStatus("/robots.txt", 200);
+  const body = await response.text();
+  if (!body.includes("Disallow: /api/") || !body.includes("Sitemap:")) {
+    throw new Error("robots.txt must disallow API routes and reference the sitemap");
+  }
+});
+
 await check("opportunity directory page responds", async () => {
   await expectStatus("/opportunities", 200);
 });
