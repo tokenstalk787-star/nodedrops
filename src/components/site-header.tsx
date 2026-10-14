@@ -1,9 +1,10 @@
 import Link from "next/link";
+
 const navigation = [
   { label: "Explore", href: "/opportunities" },
-  { label: "Node Guides", href: "/nodes" },
-  { label: "Developers", href: "/developers" },
-  { label: "Research", href: "/research" },
+  { label: "Verification", href: "/methodology" },
+  { label: "FAQ", href: "/faq" },
+  { label: "About", href: "/about" },
 ];
 
 export function SiteHeader() {
@@ -54,17 +55,17 @@ export function SiteHeader() {
           }}
         >
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               style={{ color: "var(--muted)" }}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
 
-          <a
-            href="/dashboard"
+          <Link
+            href="/opportunities"
             style={{
               padding: "10px 14px",
               borderRadius: 9,
@@ -73,8 +74,8 @@ export function SiteHeader() {
               fontWeight: 700,
             }}
           >
-            My Tracker
-          </a>
+            Find opportunities
+          </Link>
         </nav>
       </div>
     </header>
