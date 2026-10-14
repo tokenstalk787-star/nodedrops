@@ -1,0 +1,54 @@
+name: Listing correction or outdated information
+description: Report a broken source, changed program status, or inaccurate opportunity detail.
+title: "[Listing correction]: "
+labels:
+  - data-quality
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include private keys, seed phrases, passwords, or personal account information.
+  - type: input
+    id: listing_url
+    attributes:
+      label: NodeDrops listing URL
+      description: Paste the URL of the opportunity listing.
+      placeholder: https://nodedrops.xyz/opportunities/example-slug
+    validations:
+      required: true
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: What needs attention?
+      options:
+        - Official source is broken
+        - Program status changed
+        - Incentive information is inaccurate
+        - Participation requirements changed
+        - Cost or hardware guidance is inaccurate
+        - Other factual correction
+    validations:
+      required: true
+  - type: input
+    id: official_source
+    attributes:
+      label: Official source or evidence URL
+      description: Link to the project's own announcement, docs, or repository when possible.
+      placeholder: https://project.example/docs
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What should be corrected?
+      description: Explain what appears inaccurate and what the evidence supports.
+      placeholder: Include dates or specific text where helpful.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I have not included any private key, seed phrase, password, or other secret.
+          required: true
