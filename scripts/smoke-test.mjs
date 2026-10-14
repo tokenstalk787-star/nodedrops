@@ -146,6 +146,38 @@ await check("API caps excessive page size", async () => {
   }
 });
 
+await check("homepage responds with NodeDrops content", async () => {
+  const response = await expectStatus("/", 200);
+  const html = await response.text();
+  if (!html.toLowerCase().includes("nodedrops") || !html.includes("<h1")) {
+    throw new Error("homepage is missing expected brand or primary heading");
+  }
+});
+
+await check("about page responds with page-specific content", async () => {
+  const response = await expectStatus("/about", 200);
+  const html = await response.text();
+  if (!html.includes("Discover opportunities in Web3.") || !html.includes('rel="canonical"')) {
+    throw new Error("about page is missing its heading or canonical URL");
+  }
+});
+
+await check("FAQ page responds with safety guidance", async () => {
+  const response = await expectStatus("/faq", 200);
+  const html = await response.text();
+  if (!html.includes("seed phrase") || !html.includes('rel="canonical"')) {
+    throw new Error("FAQ page is missing wallet safety guidance or canonical URL");
+  }
+});
+
+await check("methodology page responds with verification guidance", async () => {
+  const response = await expectStatus("/methodology", 200);
+  const html = await response.text();
+  if (!html.includes("verification methodology") || !html.includes('rel="canonical"')) {
+    throw new Error("methodology page is missing verification content or canonical URL");
+  }
+});
+
 await check("opportunity directory page responds", async () => {
   await expectStatus("/opportunities", 200);
 });
