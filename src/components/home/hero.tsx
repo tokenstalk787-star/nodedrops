@@ -96,7 +96,7 @@ export function HomeHero() {
               href="/opportunities?category=Node"
               className="rounded-full border border-white/10 px-3 py-1.5 transition hover:border-emerald-400/30 hover:text-emerald-300"
             >
-              Nodes
+              Incentivized nodes
             </Link>
             <Link
               href="/opportunities?category=Developer"
