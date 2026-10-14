@@ -20,20 +20,18 @@ export function HomeHero() {
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-40" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
             </span>
-            Your Web3 opportunity discovery hub
+            The node & testnet opportunity hub
           </div>
 
           <h1 className="text-4xl font-semibold leading-[1.12] tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">
             Find your next
             <span className="block bg-gradient-to-r from-emerald-300 via-emerald-400 to-cyan-300 bg-clip-text text-transparent">
-              Web3 opportunity.
+              node opportunity.
             </span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg sm:leading-8">
-            Discover blockchain testnets, node programs and developer
-            campaigns in one place. Explore requirements, track program
-            status and start with official project sources.
+            Discover testnets, incentivized node programs and developer opportunities. Compare participation requirements, check incentive evidence and follow official project sources before you commit time or money.
           </p>
 
           <form
