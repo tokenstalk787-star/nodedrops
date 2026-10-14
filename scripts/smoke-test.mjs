@@ -92,12 +92,19 @@ await check("opportunity write endpoint rejects unauthenticated requests", async
   }
 });
 
-await check("first listed opportunity detail responds", async () => {
+await check("first listed opportunity detail responds with page-specific SEO", async () => {
   if (!firstSlug) {
     throw new Error("no public opportunity is available to test");
   }
   await expectStatus(`/api/opportunities/${encodeURIComponent(firstSlug)}`, 200);
-  await expectStatus(`/opportunities/${encodeURIComponent(firstSlug)}`, 200);
+  const response = await expectStatus(
+    `/opportunities/${encodeURIComponent(firstSlug)}`,
+    200,
+  );
+  const html = await response.text();
+  if (!html.includes('rel="canonical"') || !html.includes("/opportunities/")) {
+    throw new Error("opportunity page is missing its canonical detail URL");
+  }
 });
 
 const isProductionHost = !/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(
