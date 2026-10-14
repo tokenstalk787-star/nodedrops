@@ -67,7 +67,7 @@ await check("sitemap responds with XML", async () => {
   const xml = await response.text();
   const expectedCanonical = (
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://nodedrops.xyz"
-  ).replace(/\\/+$/, "");
+  ).replace(/\/+$/, "");
   if (!xml.includes("<urlset") || !xml.includes(expectedCanonical)) {
     throw new Error("sitemap XML is missing the expected URL set or canonical site");
   }
