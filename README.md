@@ -56,7 +56,18 @@ pnpm exec prisma validate
 pnpm exec tsc --noEmit
 pnpm lint
 pnpm build
+pnpm smoke
 ```
+
+The smoke test expects the app to be running locally at `http://localhost:3000`. To smoke-test the deployed site from PowerShell instead:
+
+```powershell
+$env:SITE_URL = "https://nodedrops.xyz"
+pnpm smoke
+Remove-Item Env:SITE_URL
+```
+
+The smoke test is read-only. It checks health/database connectivity, directory and detail routes, API response shapes, invalid/missing slugs, sitemap output, and production demo-data protection.
 
 If the project has not yet been migrated in the target environment, run `pnpm exec prisma migrate deploy` before seeding. Do not run destructive reset commands against a production database.
 
