@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum OpportunityStatus {
+  UPCOMING
+  ACTIVE
+  PAUSED
+  ENDED
+}
+
+enum IncentiveStatus {
+  CONFIRMED
+  POTENTIAL
+  NOT_ANNOUNCED
+}
+
+model Opportunity {
+  id                String            @id @default(cuid())
+  name              String            @db.VarChar(160)
+  slug              String            @unique @db.VarChar(180)
+  summary           String            @db.VarChar(500)
+  category          String            @db.VarChar(80)
+  network           String?           @db.VarChar(120)
+  status            OpportunityStatus @default(UPCOMING)
+  incentiveStatus   IncentiveStatus   @default(NOT_ANNOUNCED)
+  difficulty        String?           @db.VarChar(40)
+  estimatedCostUsd  Decimal?          @db.Decimal(10, 2)
+  officialUrl       String?           @db.VarChar(2048)
+  lastVerifiedAt    DateTime?
+  verificationNotes String?           @db.Text
+  sourceUrl         String?           @db.VarChar(2048)
+  isDemo            Boolean           @default(false)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([status, category])
+  @@index([incentiveStatus])
+}
