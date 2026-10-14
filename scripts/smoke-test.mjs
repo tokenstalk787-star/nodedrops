@@ -238,6 +238,13 @@ await check("opportunity write endpoint rejects unauthenticated requests", async
   }
 });
 
+await check("unknown opportunity detail page returns 404", async () => {
+  await expectStatus(
+    "/opportunities/nodedrops-smoke-test-missing-slug",
+    404,
+  );
+});
+
 await check("first listed opportunity detail responds with page-specific SEO", async () => {
   if (!firstSlug) {
     throw new Error("no public opportunity is available to test");
