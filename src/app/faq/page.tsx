@@ -48,7 +48,7 @@ const faqs = [
   {
     question: "What should I do if a listing is incorrect?",
     answer:
-      "Check the project's official sources first. Once NodeDrops publishes an official contact channel, use it to submit the listing URL and evidence supporting the correction.",
+      "Check the project's official sources first. Use the “Report a correction” link on an opportunity detail page to submit the listing URL and evidence supporting the correction through GitHub Issues.",
   },
 ];
 
