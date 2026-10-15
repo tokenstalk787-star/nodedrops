@@ -85,6 +85,8 @@ export function OpportunityCard({
           Network: {opportunity.network}
         </p>
       )}
+        </div>
+      </div>
 
       <p className="mt-3 flex-1 text-sm leading-6 text-slate-400">
         {opportunity.summary}
