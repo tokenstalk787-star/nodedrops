@@ -1,0 +1,1 @@
+ALTER TABLE `Opportunity` ADD COLUMN `logoUrl` VARCHAR(2048) NULL;
