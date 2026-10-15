@@ -116,10 +116,11 @@ export function AdminPanel() {
         verificationNotes: form.verificationNotes || null,
         lastVerifiedAt: form.lastVerifiedAt ? new Date(form.lastVerifiedAt).toISOString() : null,
       };
+      const requestBody = editingSlug ? Object.fromEntries(Object.entries(body).filter(([key]) => key !== "slug")) : body;
       const response = await fetch(editingSlug ? `/api/admin/opportunities/${encodeURIComponent(editingSlug)}` : "/api/opportunities", {
         method: editingSlug ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey.trim()}` },
-        body: JSON.stringify(body),
+        body: JSON.stringify(requestBody),
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error ?? "Opportunity create nahi hui.");
