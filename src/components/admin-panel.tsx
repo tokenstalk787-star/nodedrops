@@ -134,6 +134,52 @@ export function AdminPanel() {
     }
   }
 
+  function startEdit(item: Opportunity) {
+    setEditingSlug(item.slug);
+    setForm({
+      name: item.name,
+      slug: item.slug,
+      summary: item.summary,
+      category: item.category,
+      network: item.network ?? "",
+      status: item.status,
+      incentiveStatus: item.incentiveStatus,
+      difficulty: item.difficulty ?? "",
+      estimatedCostUsd: item.estimatedCostUsd == null ? "" : String(item.estimatedCostUsd),
+      officialUrl: item.officialUrl ?? "",
+      logoUrl: item.logoUrl ?? "",
+      sourceUrl: item.sourceUrl ?? "",
+      verificationNotes: item.verificationNotes ?? "",
+      lastVerifiedAt: item.lastVerifiedAt ? new Date(item.lastVerifiedAt).toISOString().slice(0, 10) : "",
+    });
+    setError("");
+    setNotice(`Editing ${item.name}. Save changes when finished.`);
+  }
+
+  async function handleDelete(item: Opportunity) {
+    if (!window.confirm(`Delete “${item.name}”? This cannot be undone.`)) return;
+    setError("");
+    setNotice("");
+    try {
+      const response = await fetch(`/api/admin/opportunities/${encodeURIComponent(item.slug)}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${apiKey.trim()}` },
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error ?? "Opportunity delete nahi hui.");
+      }
+      if (editingSlug === item.slug) {
+        setEditingSlug(null);
+        setForm(initialForm);
+      }
+      setNotice(`“${item.name}” delete ho gayi.`);
+      await loadItems();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Opportunity delete nahi hui.");
+    }
+  }
+
   function signOut() {
     setApiKey("");
     setEditingSlug(null);
@@ -182,19 +228,20 @@ export function AdminPanel() {
               <p className="muted mt-4 text-xs">Directory currently loads up to 50 non-demo public records. Editing and deletion controls are not enabled in this first admin release.</p>
             </section>
             <section className="panel p-5 sm:p-6">
-              <h2 className="text-xl font-semibold">Add opportunity</h2><p className="muted mt-1 text-sm leading-6">Only publish incentive claims when you have a source URL and verification notes.</p>
-              <form className="mt-5 space-y-4" onSubmit={handleCreate}>
+              <h2 className="text-xl font-semibold">{editingSlug ? "Edit opportunity" : "Add opportunity"}</h2><p className="muted mt-1 text-sm leading-6">Only publish incentive claims when you have a source URL and verification notes.</p>
+              <form className="mt-5 space-y-4" onSubmit={handleSave}>
                 <div><label className={labelClass} htmlFor="name">Project name *</label><input id="name" className={inputClass} value={form.name} onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value, slug: prev.slug || toSlug(event.target.value) }))} maxLength={160} required minLength={2} /></div>
-                <div><label className={labelClass} htmlFor="slug">URL slug *</label><input id="slug" className={inputClass} value={form.slug} onChange={(event) => setForm((prev) => ({ ...prev, slug: toSlug(event.target.value) }))} maxLength={180} required minLength={2} pattern="[a-z0-9]+(-[a-z0-9]+)*" /></div>
+                <div><label className={labelClass} htmlFor="slug">URL slug *</label><input id="slug" className={inputClass} value={form.slug} onChange={(event) => setForm((prev) => ({ ...prev, slug: toSlug(event.target.value) }))} disabled={Boolean(editingSlug)} maxLength={180} required minLength={2} pattern="[a-z0-9]+(-[a-z0-9]+)*" /></div>
                 <div><label className={labelClass} htmlFor="summary">Summary *</label><textarea id="summary" className={inputClass} value={form.summary} onChange={(event) => setForm((prev) => ({ ...prev, summary: event.target.value }))} rows={3} maxLength={500} minLength={10} required /></div>
                 <div className="grid gap-4 sm:grid-cols-2"><div><label className={labelClass} htmlFor="category">Category *</label><input id="category" className={inputClass} value={form.category} onChange={(event) => setForm((prev) => ({ ...prev, category: event.target.value }))} maxLength={80} required /></div><div><label className={labelClass} htmlFor="network">Network</label><input id="network" className={inputClass} value={form.network} onChange={(event) => setForm((prev) => ({ ...prev, network: event.target.value }))} maxLength={120} placeholder="e.g. Ethereum" /></div></div>
                 <div className="grid gap-4 sm:grid-cols-2"><div><label className={labelClass} htmlFor="status">Project status</label><select id="status" className={inputClass} value={form.status} onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value }))}>{["UPCOMING", "ACTIVE", "PAUSED", "ENDED"].map((value) => <option key={value}>{value}</option>)}</select></div><div><label className={labelClass} htmlFor="incentive">Incentive status</label><select id="incentive" className={inputClass} value={form.incentiveStatus} onChange={(event) => setForm((prev) => ({ ...prev, incentiveStatus: event.target.value }))}>{["NOT_ANNOUNCED", "POTENTIAL", "CONFIRMED"].map((value) => <option key={value}>{value}</option>)}</select></div></div>
                 <div className="grid gap-4 sm:grid-cols-2"><div><label className={labelClass} htmlFor="difficulty">Difficulty</label><select id="difficulty" className={inputClass} value={form.difficulty} onChange={(event) => setForm((prev) => ({ ...prev, difficulty: event.target.value }))}>{["Beginner", "Intermediate", "Advanced"].map((value) => <option key={value}>{value}</option>)}</select></div><div><label className={labelClass} htmlFor="cost">Estimated cost (USD)</label><input id="cost" className={inputClass} type="number" min="0" max="99999999.99" step="0.01" value={form.estimatedCostUsd} onChange={(event) => setForm((prev) => ({ ...prev, estimatedCostUsd: event.target.value }))} placeholder="0.00" /></div></div>
                 <div><label className={labelClass} htmlFor="officialUrl">Official URL</label><input id="officialUrl" className={inputClass} type="url" value={form.officialUrl} onChange={(event) => setForm((prev) => ({ ...prev, officialUrl: event.target.value }))} maxLength={2048} placeholder="https://…" /></div>
+                <div><label className={labelClass} htmlFor="logoUrl">Protocol logo URL</label><input id="logoUrl" className={inputClass} type="url" value={form.logoUrl} onChange={(event) => setForm((prev) => ({ ...prev, logoUrl: event.target.value }))} maxLength={2048} placeholder="https://…/protocol-logo.png" /><p className="muted mt-1 text-xs">Public HTTPS image URL use karein; supported formats depend on the image host.</p>{form.logoUrl && <div className="mt-2 flex items-center gap-3 rounded-xl border border-[var(--border)] p-3"><img src={form.logoUrl} alt="Protocol logo preview" className="h-12 w-12 rounded-lg object-contain" /><span className="muted break-all text-xs">Logo preview</span></div>}</div>
                 <div><label className={labelClass} htmlFor="sourceUrl">Verification source URL</label><input id="sourceUrl" className={inputClass} type="url" value={form.sourceUrl} onChange={(event) => setForm((prev) => ({ ...prev, sourceUrl: event.target.value }))} maxLength={2048} placeholder="https://official-announcement…" /></div>
                 <div><label className={labelClass} htmlFor="verificationNotes">Verification notes</label><textarea id="verificationNotes" className={inputClass} value={form.verificationNotes} onChange={(event) => setForm((prev) => ({ ...prev, verificationNotes: event.target.value }))} rows={3} maxLength={10000} placeholder="What did the source confirm? Add context and caveats." /></div>
                 <div><label className={labelClass} htmlFor="verifiedAt">Last verified date</label><input id="verifiedAt" className={inputClass} type="date" value={form.lastVerifiedAt} onChange={(event) => setForm((prev) => ({ ...prev, lastVerifiedAt: event.target.value }))} /></div>
-                <button type="submit" disabled={saving} className="w-full rounded-xl bg-[#a5f3a8] px-4 py-3 font-semibold text-[#0a130b] transition hover:bg-[#c1fac3] disabled:cursor-not-allowed disabled:opacity-60">{saving ? "Saving opportunity…" : "Create opportunity"}</button>
+                <button type="submit" disabled={saving} className="w-full rounded-xl bg-[#a5f3a8] px-4 py-3 font-semibold text-[#0a130b] transition hover:bg-[#c1fac3] disabled:cursor-not-allowed disabled:opacity-60">{saving ? "Saving opportunity…" : editingSlug ? "Save changes" : "Create opportunity"}</button>{editingSlug && <button type="button" onClick={() => { setEditingSlug(null); setForm(initialForm); setError(""); setNotice(""); }} className="w-full rounded-xl border border-[var(--border)] px-4 py-3 text-sm">Cancel editing</button>}
               </form>
             </section>
           </div>
