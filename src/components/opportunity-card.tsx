@@ -68,7 +68,10 @@ export function OpportunityCard({
         </span>
       </div>
 
-      <div className="mt-5 flex items-center gap-3">\n        {opportunity.logoUrl ? <img src={opportunity.logoUrl} alt={`${opportunity.name} logo`} loading="lazy" referrerPolicy="no-referrer" className="h-12 w-12 shrink-0 rounded-xl border border-white/10 bg-white p-1 object-contain" /> : <div aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-sm font-semibold text-slate-400">{opportunity.name.slice(0, 1).toUpperCase()}</div>}\n        <div className="min-w-0 flex-1">\n      <h2 className="text-lg font-semibold tracking-tight text-white">
+      <div className="mt-5 flex items-center gap-3">
+        {opportunity.logoUrl ? <img src={opportunity.logoUrl} alt={`${opportunity.name} logo`} loading="lazy" referrerPolicy="no-referrer" className="h-12 w-12 shrink-0 rounded-xl border border-white/10 bg-white p-1 object-contain" /> : <div aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-sm font-semibold text-slate-400">{opportunity.name.slice(0, 1).toUpperCase()}</div>}
+        <div className="min-w-0 flex-1">
+      <h2 className="text-lg font-semibold tracking-tight text-white">
         <Link
           href={`/opportunities/${encodeURIComponent(opportunity.slug)}`}
           className="rounded-sm outline-none transition hover:text-emerald-300 focus-visible:ring-2 focus-visible:ring-emerald-400"
