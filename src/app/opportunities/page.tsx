@@ -64,6 +64,7 @@ export default async function OpportunitiesPage({
       difficulty: true,
       estimatedCostUsd: true,
       officialUrl: true,
+      logoUrl: true,
       sourceUrl: true,
       lastVerifiedAt: true,
       verificationNotes: true,
