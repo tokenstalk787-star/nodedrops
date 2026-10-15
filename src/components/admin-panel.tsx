@@ -14,6 +14,7 @@ type Opportunity = {
   difficulty: string | null;
   estimatedCostUsd: string | number | null;
   officialUrl: string | null;
+  logoUrl: string | null;
   sourceUrl: string | null;
   verificationNotes: string | null;
   lastVerifiedAt: string | null;
@@ -32,6 +33,7 @@ const initialForm = {
   difficulty: "Beginner",
   estimatedCostUsd: "",
   officialUrl: "",
+  logoUrl: "",
   sourceUrl: "",
   verificationNotes: "",
   lastVerifiedAt: "",
@@ -54,6 +56,7 @@ export function AdminPanel() {
   const [unlocked, setUnlocked] = useState(false);
   const [items, setItems] = useState<Opportunity[]>([]);
   const [form, setForm] = useState(initialForm);
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -92,7 +95,7 @@ export function AdminPanel() {
     needsReview: items.filter((item) => !item.lastVerifiedAt).length,
   }), [items]);
 
-  async function handleCreate(event: FormEvent<HTMLFormElement>) {
+  async function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setNotice("");
@@ -108,19 +111,21 @@ export function AdminPanel() {
         network: form.network || null,
         difficulty: form.difficulty || null,
         officialUrl: form.officialUrl || null,
+        logoUrl: form.logoUrl || null,
         sourceUrl: form.sourceUrl || null,
         verificationNotes: form.verificationNotes || null,
         lastVerifiedAt: form.lastVerifiedAt ? new Date(form.lastVerifiedAt).toISOString() : null,
       };
-      const response = await fetch("/api/opportunities", {
-        method: "POST",
+      const response = await fetch(editingSlug ? `/api/admin/opportunities/${encodeURIComponent(editingSlug)}` : "/api/opportunities", {
+        method: editingSlug ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey.trim()}` },
         body: JSON.stringify(body),
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error ?? "Opportunity create nahi hui.");
-      setNotice(`“${payload.data?.name ?? form.name}” successfully add ho gayi.`);
+      setNotice(`“${payload.data?.name ?? form.name}” ${editingSlug ? "update" : "add"} ho gayi.`);
       setForm(initialForm);
+      setEditingSlug(null);
       await loadItems();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Opportunity create nahi hui.");
@@ -131,6 +136,8 @@ export function AdminPanel() {
 
   function signOut() {
     setApiKey("");
+    setEditingSlug(null);
+    setForm(initialForm);
     setUnlocked(false);
     setItems([]);
     setNotice("");
@@ -149,7 +156,7 @@ export function AdminPanel() {
           <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border)] bg-[#17211b] text-[#a5f3a8]"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-6 w-6" stroke="currentColor" strokeWidth="1.8"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg></div>
           <h2 className="text-xl font-semibold">Unlock admin tools</h2>
           <p className="muted mt-2 text-sm leading-6">Enter your server-side <code>ADMIN_API_KEY</code>. It stays in this page’s memory only and is cleared when you lock the console or leave the page.</p>
-          <form className="mt-6" onSubmit={(event) => { event.preventDefault(); setError(""); if (apiKey.trim().length < 32) { setError("Key must contain at least 32 characters."); return; } setUnlocked(true); }}>
+          <form className="mt-6" onSubmit={(event) => { event.preventDefault(); setError(""); if (apiKey.trim().length < 32) { setError("Key must contain at least 32 characters."); return; } void (async () => { try { const response = await fetch("/api/admin/verify", { method: "POST", headers: { Authorization: `Bearer ${apiKey.trim()}` }, cache: "no-store" }); const payload = await response.json(); if (!response.ok) throw new Error(payload.error ?? "Invalid admin key."); setUnlocked(true); } catch (err) { setError(err instanceof Error ? err.message : "Admin verification failed."); } })(); }}>
             <label className={labelClass} htmlFor="admin-key">Admin API key</label>
             <input id="admin-key" className={inputClass} type="password" autoComplete="current-password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder="Paste your server environment key" required minLength={32} />
             <p className="muted mt-2 text-xs">Do not share this key or commit it to GitHub. If it has leaked, rotate it in Vercel environment variables.</p>
