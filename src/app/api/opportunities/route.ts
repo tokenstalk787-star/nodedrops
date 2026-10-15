@@ -390,6 +390,7 @@ export async function POST(request: NextRequest) {
       "difficulty",
       "estimatedCostUsd",
       "officialUrl",
+      "logoUrl",
       "lastVerifiedAt",
       "verificationNotes",
       "sourceUrl",
@@ -444,6 +445,7 @@ export async function POST(request: NextRequest) {
     const network = optionalString(body.network, 120);
     const difficulty = optionalString(body.difficulty, 40);
     const officialUrl = optionalString(body.officialUrl, MAX_URL_LENGTH);
+    const logoUrl = optionalString(body.logoUrl, MAX_URL_LENGTH);
     const sourceUrl = optionalString(body.sourceUrl, MAX_URL_LENGTH);
     const verificationNotes = optionalString(
       body.verificationNotes,
@@ -454,6 +456,7 @@ export async function POST(request: NextRequest) {
       ["network", network, 120],
       ["difficulty", difficulty, 40],
       ["officialUrl", officialUrl, MAX_URL_LENGTH],
+      ["logoUrl", logoUrl, MAX_URL_LENGTH],
       ["sourceUrl", sourceUrl, MAX_URL_LENGTH],
       [
         "verificationNotes",
@@ -473,6 +476,7 @@ export async function POST(request: NextRequest) {
 
     if (
       !validHttpUrl(officialUrl) ||
+      !validHttpUrl(logoUrl) ||
       !validHttpUrl(sourceUrl)
     ) {
       return jsonError(
@@ -567,6 +571,7 @@ export async function POST(request: NextRequest) {
         difficulty: difficulty ?? null,
         estimatedCostUsd: estimatedCostUsd ?? null,
         officialUrl: officialUrl ?? null,
+        logoUrl: logoUrl ?? null,
         lastVerifiedAt: lastVerifiedAt ?? null,
         verificationNotes: verificationNotes ?? null,
         sourceUrl: sourceUrl ?? null,
