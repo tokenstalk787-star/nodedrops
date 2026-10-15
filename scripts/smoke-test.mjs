@@ -238,6 +238,25 @@ await check("opportunity write endpoint rejects unauthenticated requests", async
   }
 });
 
+await check("admin key verification rejects unauthenticated requests", async () => {
+  const response = await fetch(new URL("/api/admin/verify", baseUrl), { method: "POST" });
+  if (response.status !== 401) throw new Error(`expected HTTP 401, received ${response.status}`);
+});
+
+await check("admin update endpoint rejects unauthenticated requests", async () => {
+  const response = await fetch(new URL("/api/admin/opportunities/nodedrops-smoke-test", baseUrl), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: "Unauthorized update" }),
+  });
+  if (response.status !== 401) throw new Error(`expected HTTP 401, received ${response.status}`);
+});
+
+await check("admin delete endpoint rejects unauthenticated requests", async () => {
+  const response = await fetch(new URL("/api/admin/opportunities/nodedrops-smoke-test", baseUrl), { method: "DELETE" });
+  if (response.status !== 401) throw new Error(`expected HTTP 401, received ${response.status}`);
+});
+
 await check("unknown opportunity detail page returns 404", async () => {
   await expectStatus(
     "/opportunities/nodedrops-smoke-test-missing-slug",
