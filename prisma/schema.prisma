@@ -32,6 +32,7 @@ model Opportunity {
   difficulty        String?           @db.VarChar(40)
   estimatedCostUsd  Decimal?          @db.Decimal(10, 2)
   officialUrl       String?           @db.VarChar(2048)
+  logoUrl           String?           @db.VarChar(2048)
   lastVerifiedAt    DateTime?
   verificationNotes String?           @db.Text
   sourceUrl         String?           @db.VarChar(2048)
