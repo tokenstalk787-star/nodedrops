@@ -17,6 +17,7 @@ export type DirectoryOpportunity = {
   difficulty: string | null;
   estimatedCostUsd: string | null;
   officialUrl: string | null;
+  logoUrl?: string | null;
   sourceUrl: string | null;
   lastVerifiedAt: string | null;
   verificationNotes: string | null;
