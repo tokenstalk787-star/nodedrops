@@ -46,6 +46,7 @@ export async function GET(
         difficulty: true,
         estimatedCostUsd: true,
         officialUrl: true,
+        logoUrl: true,
         lastVerifiedAt: true,
         verificationNotes: true,
         sourceUrl: true,
