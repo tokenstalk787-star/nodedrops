@@ -1,38 +1,52 @@
 # NodeDrops.xyz — Implementation Log
 
-## Phase 02: Design System & Visual Foundation (2026-10-25)
+## Phase 03: NodeDrops Homepage & Destination Routing (2026-10-25)
 
 ### Files Created:
-1. `src/lib/utils.ts` — `cn()` class merger and `formatBytes()` helper.
-2. `src/lib/constants.ts` — Main navigation links, footer categorized links, metadata constants.
-3. `src/components/ui/Logo.tsx` — Vector SVG brand mark and typographic logo with small, medium, and large size variants.
-4. `src/components/ui/Button.tsx` — Semantic, keyboard-navigable button with 5 variants (`primary`, `secondary`, `outline`, `ghost`, `danger`), 3 sizes, and loading state.
-5. `src/components/ui/Badge.tsx` — Status indicator badge with 7 color themes, optional pulsing radar ping, and dot indicators.
-6. `src/components/ui/Input.tsx` — Accessible text input supporting labels, left/right icons, error states, and helper descriptions.
-7. `src/components/ui/Select.tsx` — Accessible styled dropdown select with custom arrow and helper/error attributes.
-8. `src/components/ui/Card.tsx` — Compound card components (`Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`) with cyan/blue/violet hover glows.
-9. `src/components/ui/CopyButton.tsx` — Accessible clipboard copy component with visual feedback checkmark and timeout reset.
-10. `src/components/ui/Alert.tsx` — Accessible alert box with 4 status variants (`info`, `success`, `warning`, `error`), icons, and dismiss handling.
-11. `src/components/ui/Breadcrumbs.tsx` — Semantic `<nav aria-label="Breadcrumb">` with chevrons and active page indicators.
-12. `src/components/ui/SearchBar.tsx` — Global search input with clear trigger and `⌘K` / `Ctrl+K` keyboard shortcut listener.
-13. `src/components/ui/Pagination.tsx` — Pagination bar with previous/next triggers, page numbers, and ellipsis.
-14. `src/components/ui/Tabs.tsx` — WAI-ARIA tabs with keyboard arrow navigation (`ArrowLeft`, `ArrowRight`, `Home`, `End`).
-15. `src/components/ui/SkeletonLoader.tsx` — Shimmer loading placeholders with `prefers-reduced-motion` support.
-16. `src/components/ui/EmptyState.tsx` — Centered zero-data state with icon, explanatory copy, and action trigger.
-17. `src/components/ui/ErrorState.tsx` — Accessible error boundary presentation with retry trigger and error details.
-18. `src/components/ui/Modal.tsx` — Accessible modal dialog with focus lock, Escape key dismiss, backdrop blur, and scroll lock.
-19. `src/components/navigation/DesktopNavigation.tsx` — Desktop navigation bar with active route highlighting and live badges.
-20. `src/components/navigation/MobileNavigation.tsx` — Responsive mobile drawer menu with hamburger toggle and route auto-close.
-21. `src/components/layout/SiteHeader.tsx` — Integrated top navigation header.
-22. `src/components/layout/SiteFooter.tsx` — Integrated footer with ecosystem directory links and security disclaimer.
-23. `src/app/design-system/page.tsx` — Interactive living component showcase and testbench.
+1. `src/data/mock-homepage.ts` — Strongly-typed temporary dataset module containing:
+   - `ECOSYSTEMS_DATA` (Ethereum, Arbitrum, Optimism, Base, Solana, Polygon).
+   - `FEATURED_NETWORKS` (Mainnets and Testnets with CPU, RAM, NVMe specs, client pairs, sync status).
+   - `LATEST_GUIDES` (Runbooks with difficulty, duration, verification date, and network associations).
+   - `NODE_TYPES_DATA` (Full node, Validator node, Archive node, RPC node, Sequencer taxonomies).
+   - `VERIFICATION_PILLARS` (Core research methodology specifications).
+2. `src/components/home/HomeSearch.tsx` — Prominent hero search input with `⌘K` / `Ctrl+K` global keyboard listener, clear action, quick suggestion pills, and query routing to `/networks?q=...`.
+3. `src/app/networks/page.tsx` — Working destination route for networks with dynamic query filtering and hardware cards.
+4. `src/app/testnets/page.tsx` — Working destination route for public testnets with live badges and hardware requirements.
+5. `src/app/mainnets/page.tsx` — Working destination route for production mainnets.
+6. `src/app/guides/page.tsx` — Working destination route for deployment runbooks with difficulty and time estimates.
+7. `src/app/tools/page.tsx` — Working destination route for node operator utilities roadmap.
 
 ### Files Modified:
-- `src/app/layout.tsx` — Integrated `SiteHeader` and `SiteFooter` around the application body.
+- `src/app/page.tsx` — Rebuilt from scratch as a server-rendered homepage (RSC) containing all 12 required sections:
+  1. Sticky SiteHeader and navigation.
+  2. Hero title: "Your Guide to Running Blockchain Nodes".
+  3. Supporting text explaining the research and guide platform.
+  4. Prominent global search input (`HomeSearch`).
+  5. Primary actions ("Explore Testnets", "Explore Mainnets", "Browse Runbooks").
+  6. Ecosystem browsing matrix (6 major chains with symbol, layer, and node estimates).
+  7. Featured networks with real hardware profiles.
+  8. Latest deployment guides with verified timestamps.
+  9. Node-type classification taxonomy cards (Full, Validator, Archive, RPC, Sequencer).
+  10. Content verification methodology section (4 research pillars).
+  11. Final call-to-action banner with dual CTA buttons.
+  12. SiteFooter with multi-column ecosystem links and security notice.
 
 ### Verification Commands & Results:
 - `pnpm type-check` (`tsc --noEmit`): **Passed with 0 errors**.
 - `pnpm lint` (`next lint`): **Passed with 0 errors and 0 warnings**.
-- `pnpm build` (`next build`): **Passed with code 0** (Generated all 6 static routes: `/`, `/_not-found`, `/design-system`).
-- Route probe: `http://localhost:3000` returned **HTTP 200 OK (36,651 bytes)**.
-- Route probe: `http://localhost:3000/design-system` returned **HTTP 200 OK (77,659 bytes)**.
+- `pnpm build` (`next build`): **Passed with code 0** (Generated all 11 static and dynamic routes).
+- Local Route Probes:
+  - `http://localhost:3000/` — **HTTP 200 OK (186,161 bytes)**.
+  - `http://localhost:3000/networks` — **HTTP 200 OK (66,356 bytes)**.
+  - `http://localhost:3000/testnets` — **HTTP 200 OK (45,917 bytes)**.
+  - `http://localhost:3000/mainnets` — **HTTP 200 OK (56,459 bytes)**.
+  - `http://localhost:3000/guides` — **HTTP 200 OK (60,218 bytes)**.
+  - `http://localhost:3000/tools` — **HTTP 200 OK (49,060 bytes)**.
+  - `http://localhost:3000/design-system` — **HTTP 200 OK (77,759 bytes)**.
+  - `http://localhost:3000/networks?q=Ethereum` — **HTTP 200 OK (42,880 bytes)**.
+
+---
+
+## Phase 02: Design System & Visual Foundation (2026-10-25)
+
+*(Recorded in git commit `b0864be`)*
