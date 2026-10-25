@@ -29,15 +29,15 @@ export function HomeSearch({ className }: HomeSearchProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/networks?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
     } else {
-      router.push("/networks");
+      router.push("/search");
     }
   };
 
   const handleChipClick = (term: string) => {
     setQuery(term);
-    router.push(`/networks?q=${encodeURIComponent(term)}`);
+    router.push(`/search?q=${encodeURIComponent(term)}`);
   };
 
   return (

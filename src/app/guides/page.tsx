@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { NetworkSearch } from "@/components/network/NetworkSearch";
 import { GuideFilters } from "@/components/guide/GuideFilters";
 import { GuideCard } from "@/components/guide/GuideCard";
-import { Pagination } from "@/components/ui/Pagination";
+import { UrlPagination } from "@/components/ui/UrlPagination";
 import { EmptyState } from "@/components/ui/EmptyState";
 import {
   getPaginatedGuides,
@@ -102,10 +102,9 @@ export default async function GuidesPage({
 
           {paginatedResult.totalPages > 1 && (
             <div className="pt-6 border-t border-slate-800">
-              <Pagination
+              <UrlPagination
                 currentPage={paginatedResult.currentPage}
                 totalPages={paginatedResult.totalPages}
-                onPageChange={() => {}}
               />
             </div>
           )}

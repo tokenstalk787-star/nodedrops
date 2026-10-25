@@ -1,8 +1,8 @@
 # NodeDrops.xyz — Project Status
 
 **Current Date:** 2026-10-25  
-**Current Active Phase:** Phase 06 (Completed)  
-**Next Phase:** Phase 07 (Interactive Tools: RPC Tester, Hardware Calc, Compose Generator)  
+**Current Active Phase:** Phase 07 (Completed)  
+**Next Phase:** Phase 08 (Global Search & Discovery Polish / Admin Authentication & CMS)  
 **Overall Status:** Green / On Track  
 
 ---
@@ -15,12 +15,18 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 - **Phase 03 (NodeDrops Homepage & Destination Routing):** Completed, tested, and verified.
 - **Phase 04 (MySQL and Prisma Data Layer):** Completed, tested, and verified.
 - **Phase 05 (Network Directory and Detail Pages):** Completed, tested, and verified.
-- **Phase 06 (Node Setup Guides & Runbooks):** 100% Completed, tested, and verified.
-  - Built database-backed `/guides` directory with server-side pagination, search, category, and difficulty filtering.
-  - Built dynamic runbook detail page `/guides/[slug]` with dynamic metadata, empirical hardware requirements, safe structured markdown parsing, numbered step-by-step layout, dual terminal command blocks (PowerShell vs Bash), elevated sudo and destructive operation warnings, verification outputs, troubleshooting remedies, verified upstream sources, and table of contents.
-  - Built category archives `/categories/[slug]` displaying published node role guides and other category navigators.
-  - Enforced content verification and draft protections: draft guides (e.g. `ethereum-mainnet-staking-draft`) strictly return null, triggering HTTP 404 for public visitors.
-  - Verified 18/18 automated tests in `scripts/test-phase06.ts`, 0 type errors, 0 ESLint warnings, and successful Next.js 15 production build.
+- **Phase 06 (Node Setup Guides & Runbooks):** Completed, tested, and verified.
+- **Phase 07 (Search & Node Tools):** 100% Completed, tested, and verified.
+  - Implemented `/search` global discovery page querying real MySQL records across active networks, published guides, and node categories.
+  - Composable filters (All, Networks, Guides, Categories), debounced search input, search chips, and clean empty state with suggestions.
+  - Built 5 deterministic node tools at `/tools`:
+    1. **Hardware Requirements Checklist** (evaluated against documented network specs)
+    2. **Storage Estimation Calculator** (linear growth modeling, pruning cycles, TBW wear notice)
+    3. **Bandwidth Planning Calculator** (P2P gossip + RPC QPS, 1.5x burst factor, monthly TB egress)
+    4. **Node Operating Cost Estimator** (Home Lab CapEx vs Cloud VPS OpEx, electricity formulas, 3-year TCO)
+    5. **Pre-Flight Deployment Checklist** (interactive categorized pre-flight checks, progress meter, copy as markdown)
+  - Every tool includes variable definitions, mathematical formulas, explicit unit badges, input validation, and disclaimer alerts.
+  - Automated tests: 26/26 passed in `scripts/test-phase07.ts`. Production build succeeded with all 12 routes.
 
 ---
 
@@ -34,8 +40,8 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 | **Phase 04** | Database Architecture (Prisma, MySQL, Schema & Seed) | **Completed** | Verified (12 Tables, Idempotent Seed, 5/5 DB Tests) |
 | **Phase 05** | Network Directory & Detail Pages (/networks, /testnets, /mainnets, /networks/[slug]) | **Completed** | Verified (7/7 Repo Tests, Dynamic Routes 200 OK, 404 Verified) |
 | **Phase 06** | Guide Directory & Detail Pages (/guides, /guides/[slug], /categories/[slug]) | **Completed** | Verified (18/18 Tests Passed, Draft 404 Guard, Build 0 Errors) |
-| **Phase 07** | Interactive Tools (/tools - RPC Tester, Hardware Calc, Compose Generator) | Pending | Queued next |
-| **Phase 08** | Global Search & Discovery Engine | Pending | |
+| **Phase 07** | Search & Node Tools (/search, /tools - 5 Deterministic Calculators) | **Completed** | Verified (26/26 Tests Passed, 12/12 Routes 200 OK, Build 0 Errors) |
+| **Phase 08** | Global Search & Discovery Polish | Pending | Integrated with Phase 07, queued next |
 | **Phase 09** | Admin Authentication & Content Management System | Pending | |
 | **Phase 10** | Content Policy, Verification, SEO & Analytics | Pending | |
 | **Phase 11** | End-to-End QA, Production Deployment (Vercel & MySQL) | Pending | |
@@ -48,4 +54,4 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 - **Database ORM:** Prisma Client 6.19.3
 - **Runtime Environment:** Next.js 15.5.28 (App Router) + TypeScript 5.9.3 Strict Mode
 - **Styling:** Tailwind CSS v4 with custom Web3 infrastructure tokens
-- **Security & Integrity:** Safe structured Markdown parsing (no `dangerouslySetInnerHTML`), strict draft hiding (`publicationStatus === 'PUBLISHED'`), and no falsified claims.
+- **Integrity & Security:** Parameterized Prisma search queries, draft content protection, deterministic mathematical algorithms, and strict unit labeling.
