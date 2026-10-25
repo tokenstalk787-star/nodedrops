@@ -1,5 +1,48 @@
 # NodeDrops.xyz — Implementation Log
 
+## Phase 06: Node Setup Guides & Runbooks (2026-10-25)
+
+### Files Created:
+1. `src/components/guide/CopyCommandButton.tsx` — Tactical clipboard copy button with timeout feedback.
+2. `src/components/guide/CommandBlock.tsx` — Terminal command block distinguishing PowerShell vs. Bash, highlighting sudo/admin and destructive commands.
+3. `src/components/guide/PrerequisitesPanel.tsx` — Structured prerequisites checklist with icons.
+4. `src/components/guide/HardwareRequirements.tsx` — Empirical hardware specification table (CPU, RAM, NVMe, Bandwidth).
+5. `src/components/guide/WarningNotice.tsx` — Prominent operational alerts (distinguishing Mainnet vs Testnet risks).
+6. `src/components/guide/ExpectedOutput.tsx` — Visual terminal verification block for sanity checks.
+7. `src/components/guide/TroubleshootingSection.tsx` — Common failure modes, symptoms, and documented remedies.
+8. `src/components/guide/SourceList.tsx` — Verified upstream documentation sources with reliability scores.
+9. `src/components/guide/ReviewMetadata.tsx` — Review verification status, reviewed date, author, time, and last updated.
+10. `src/components/guide/GuideTableOfContents.tsx` — Sticky table of contents with anchor links.
+11. `src/components/guide/GuideStep.tsx` — Numbered step block container.
+12. `src/components/guide/GuideCard.tsx` — Responsive guide directory card.
+13. `src/components/guide/GuideFilters.tsx` — Difficulty, network, and category filter toolbar.
+14. `src/components/guide/RelatedGuides.tsx` — Related runbook grid for same network or category.
+15. `src/components/guide/GuideContentRenderer.tsx` — Safe structured Markdown parser converting sections into native React components.
+16. `src/app/guides/[slug]/page.tsx` — Dynamic runbook detail route with metadata generation and 404 draft guard.
+17. `src/app/categories/[slug]/page.tsx` — Category archive route displaying published node role guides and other category navigators.
+18. `scripts/test-phase06.ts` — Automated test suite verifying guide queries, filters, draft protection, relations, and TOC extraction.
+
+### Files Modified:
+- `src/app/guides/page.tsx` — Replaced placeholder data with live MySQL query handling query, difficulty, network, category, and pagination.
+- `src/lib/repositories/guide.repository.ts` — Implemented `getPaginatedGuides()`, `getGuideBySlug()`, `getGuideFilterOptions()`, `incrementGuideViewCount()`.
+- `src/lib/repositories/category.repository.ts` — Updated `getCategoryBySlug()` to include full relations matching `GuideWithRelations`.
+- `prisma/seed.ts` — Seeded 5 detailed runbooks (Holesky Validator, Arbitrum Nitro Docker, Base Mainnet RPC, Solana Non-Voting RPC, and an internal DRAFT runbook).
+
+### Verification Commands & Results:
+- `pnpm tsx scripts/test-phase06.ts`: **Passed (18/18 tests passed)**
+- `pnpm type-check` (`tsc --noEmit`): **Passed with 0 errors**
+- `pnpm lint` (`next lint`): **Passed with 0 errors and 0 warnings**
+- `pnpm build` (`next build`): **Passed with code 0** (All 11 static and dynamic routes compiled)
+- Local Route Probes:
+  - `/guides`: **HTTP 200 OK**
+  - `/guides/ethereum-validator-holesky`: **HTTP 200 OK**
+  - `/guides/arbitrum-nitro-docker`: **HTTP 200 OK**
+  - `/categories/validator-nodes`: **HTTP 200 OK**
+  - `/guides/ethereum-mainnet-staking-draft`: **HTTP 404 Not Found (Draft Protection Verified)**
+  - `/categories/non-existent-category`: **HTTP 404 Not Found (404 Handling Verified)**
+
+---
+
 ## Phase 05: Network Directory and Detail Pages (2026-10-25)
 
 ### Files Created:
