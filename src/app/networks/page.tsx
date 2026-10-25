@@ -14,6 +14,15 @@ export const metadata = {
   title: "Blockchain Networks Directory — NodeDrops",
   description:
     "Explore supported blockchain networks, consensus types, empirical hardware baselines, and verified client software.",
+  alternates: {
+    canonical: "/networks",
+  },
+  openGraph: {
+    title: "Blockchain Networks Directory — NodeDrops",
+    description:
+      "Explore supported blockchain networks, consensus types, empirical hardware baselines, and verified client software.",
+    url: "https://nodedrops.xyz/networks",
+  },
 };
 
 export default async function NetworksPage({

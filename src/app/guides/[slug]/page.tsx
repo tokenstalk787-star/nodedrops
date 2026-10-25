@@ -8,6 +8,8 @@ import {
   incrementGuideViewCount,
 } from "@/lib/repositories/guide.repository";
 import { getSession } from "@/lib/auth/session";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema, buildGuideSchema } from "@/lib/seo/schema";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { ReviewMetadata } from "@/components/guide/ReviewMetadata";
@@ -66,6 +68,9 @@ export async function generateMetadata({
       : `${guide.title} | NodeDrops`,
     description: guide.summary,
     robots: isDraft ? { index: false, follow: false } : undefined,
+    alternates: {
+      canonical: `/guides/${guide.slug}`,
+    },
     openGraph: {
       title: `${guide.title} | NodeDrops`,
       description: guide.summary,
@@ -121,8 +126,18 @@ export default async function GuideDetailPage({
     { label: guide.title, href: `/guides/${guide.slug}`, current: true },
   ];
 
+  const breadcrumbSchemaItems = [
+    { name: "Home", url: "/" },
+    { name: "Guides", url: "/guides" },
+    { name: guide.title, url: `/guides/${guide.slug}` },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchemaItems)} />
+      <JsonLd data={buildGuideSchema(guide)} />
+
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />

@@ -9,6 +9,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Layers, ShieldCheck, ArrowRight, ArrowLeft } from "lucide-react";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 interface CategoryDetailPageProps {
   params: Promise<{
@@ -34,12 +36,22 @@ export async function generateMetadata({
     description:
       category.description ||
       `Explore step-by-step verified node deployment runbooks for ${category.name}.`,
+    alternates: {
+      canonical: `/categories/${category.slug}`,
+    },
     openGraph: {
       title: `${category.name} Node Runbooks | NodeDrops`,
       description:
         category.description ||
         `Explore step-by-step verified node deployment runbooks for ${category.name}.`,
       url: `https://nodedrops.xyz/categories/${category.slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${category.name} Node Runbooks | NodeDrops`,
+      description:
+        category.description ||
+        `Explore step-by-step verified node deployment runbooks for ${category.name}.`,
     },
   };
 }
@@ -61,10 +73,19 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
     { label: category.name, href: `/categories/${category.slug}`, current: true },
   ];
 
+  const breadcrumbSchemaItems = [
+    { name: "Home", url: "/" },
+    { name: "Guides", url: "/guides" },
+    { name: category.name, url: `/categories/${category.slug}` },
+  ];
+
   const otherCategories = allCategories.filter((c) => c.slug !== category.slug);
 
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchemaItems)} />
+
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Breadcrumb Navigation */}
         <Breadcrumbs items={breadcrumbs} />

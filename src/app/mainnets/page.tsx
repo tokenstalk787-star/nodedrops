@@ -17,6 +17,15 @@ export const metadata = {
   title: "Production Mainnets Directory — NodeDrops",
   description:
     "Production blockchain full nodes, validators, and RPC endpoints for Ethereum, Arbitrum, Base, Solana, and major ecosystems.",
+  alternates: {
+    canonical: "/mainnets",
+  },
+  openGraph: {
+    title: "Production Mainnets Directory — NodeDrops",
+    description:
+      "Production blockchain full nodes, validators, and RPC endpoints for Ethereum, Arbitrum, Base, Solana, and major ecosystems.",
+    url: "https://nodedrops.xyz/mainnets",
+  },
 };
 
 export default async function MainnetsPage({

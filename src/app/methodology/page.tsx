@@ -2,6 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -20,6 +22,9 @@ export const metadata: Metadata = {
   title: "Content Methodology & Verification Standards — NodeDrops",
   description:
     "Learn about our source tiering hierarchy, verification statuses, 90-day review cycles, errata submission procedures, and guide retirement policies.",
+  alternates: {
+    canonical: "/methodology",
+  },
   openGraph: {
     title: "Content Methodology & Verification Standards — NodeDrops",
     description:
@@ -34,8 +39,16 @@ export default function MethodologyPage() {
     { label: "Methodology", href: "/methodology", current: true },
   ];
 
+  const breadcrumbSchema = [
+    { name: "Home", url: "/" },
+    { name: "Methodology", url: "/methodology" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchema)} />
+
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />

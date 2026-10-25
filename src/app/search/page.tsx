@@ -30,12 +30,20 @@ export async function generateMetadata({
     return {
       title: `Search: "${query}" | NodeDrops`,
       description: `Explore blockchain networks, client runbooks, and node roles matching "${query}".`,
+      robots: { index: false, follow: true },
+      alternates: {
+        canonical: "/search",
+      },
     };
   }
 
   return {
     title: "Global Search — NodeDrops",
     description: "Search supported blockchain networks, step-by-step setup guides, and node categories.",
+    robots: { index: false, follow: true },
+    alternates: {
+      canonical: "/search",
+    },
   };
 }
 

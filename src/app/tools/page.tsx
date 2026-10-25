@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "Node Operator Sizing & Planning Tools — NodeDrops",
   description:
     "Interactive capacity planning tools for blockchain node runners: hardware readiness checklist, storage expansion estimator, bandwidth planning calculator, and node operating cost estimator.",
+  alternates: {
+    canonical: "/tools",
+  },
   openGraph: {
     title: "Node Operator Tools — NodeDrops",
     description:

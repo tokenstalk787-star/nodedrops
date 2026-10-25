@@ -17,6 +17,15 @@ export const metadata = {
   title: "Node Deployment Runbooks & Guides — NodeDrops",
   description:
     "Verified step-by-step guides for installing, syncing, securing, and maintaining blockchain nodes.",
+  alternates: {
+    canonical: "/guides",
+  },
+  openGraph: {
+    title: "Node Deployment Runbooks & Guides — NodeDrops",
+    description:
+      "Verified step-by-step guides for installing, syncing, securing, and maintaining blockchain nodes.",
+    url: "https://nodedrops.xyz/guides",
+  },
 };
 
 export default async function GuidesPage({

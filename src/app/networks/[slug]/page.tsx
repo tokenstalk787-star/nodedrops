@@ -7,6 +7,8 @@ import { NetworkTechnicalDetails } from "@/components/network/detail/NetworkTech
 import { OfficialSources } from "@/components/network/detail/OfficialSources";
 import { RelatedGuides } from "@/components/network/detail/RelatedGuides";
 import { getNetworkBySlug } from "@/lib/repositories/network.repository";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 
 interface NetworkDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -25,9 +27,26 @@ export async function generateMetadata({
     };
   }
 
+  const title = `${network.name} (${network.symbol}) Node Architecture & Specifications`;
+  const description = `Learn how to run an ${network.name} node. Hardware requirements, client software (${network.clients.map((c) => c.name).join(", ")}), and verified runbooks.`;
+
   return {
-    title: `${network.name} (${network.symbol}) Node Architecture & Specifications — NodeDrops`,
-    description: `Learn how to run an ${network.name} node. Hardware requirements, client software (${network.clients.map((c) => c.name).join(", ")}), and verified runbooks.`,
+    title,
+    description,
+    alternates: {
+      canonical: `/networks/${network.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://nodedrops.xyz/networks/${network.slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
@@ -42,8 +61,17 @@ export default async function NetworkDetailPage({
     notFound();
   }
 
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "Networks", url: "/networks" },
+    { name: network.name, url: `/networks/${network.slug}` },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbItems)} />
+
       {/* Breadcrumb Navigation */}
       <Breadcrumbs
         items={[

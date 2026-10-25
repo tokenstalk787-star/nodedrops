@@ -17,6 +17,15 @@ export const metadata = {
   title: "Public Testnets Directory — NodeDrops",
   description:
     "Test validator configurations, client upgrades, and node operations with testnet assets on public blockchain testnets.",
+  alternates: {
+    canonical: "/testnets",
+  },
+  openGraph: {
+    title: "Public Testnets Directory — NodeDrops",
+    description:
+      "Test validator configurations, client upgrades, and node operations with testnet assets on public blockchain testnets.",
+    url: "https://nodedrops.xyz/testnets",
+  },
 };
 
 export default async function TestnetsPage({

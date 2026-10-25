@@ -2,6 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ShieldCheck, Lock, EyeOff, Database, Cookie, Mail, FileText } from "lucide-react";
@@ -10,6 +12,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy — NodeDrops",
   description:
     "Transparent privacy policy documenting actual data handling, essential cookies, contact form storage, and zero-tracking commitment.",
+  alternates: {
+    canonical: "/privacy",
+  },
   openGraph: {
     title: "Privacy Policy — NodeDrops",
     description:
@@ -24,8 +29,16 @@ export default function PrivacyPage() {
     { label: "Privacy Policy", href: "/privacy", current: true },
   ];
 
+  const breadcrumbSchema = [
+    { name: "Home", url: "/" },
+    { name: "Privacy Policy", url: "/privacy" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchema)} />
+
       <div className="max-w-4xl mx-auto space-y-10">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />

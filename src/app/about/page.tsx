@@ -2,6 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -22,6 +24,9 @@ export const metadata: Metadata = {
   title: "About NodeDrops — Open Infrastructure Intelligence",
   description:
     "Learn about NodeDrops.xyz, our mission to decentralize blockchain infrastructure, our intended audience, and our educational non-commercial principles.",
+  alternates: {
+    canonical: "/about",
+  },
   openGraph: {
     title: "About NodeDrops — Open Infrastructure Intelligence",
     description:
@@ -36,8 +41,16 @@ export default function AboutPage() {
     { label: "About", href: "/about", current: true },
   ];
 
+  const breadcrumbSchema = [
+    { name: "Home", url: "/" },
+    { name: "About", url: "/about" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchema)} />
+
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />

@@ -2,6 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ShieldAlert, Scale } from "lucide-react";
@@ -10,6 +12,9 @@ export const metadata: Metadata = {
   title: "Terms of Service & Operational Disclaimer — NodeDrops",
   description:
     "Terms of service detailing the educational purpose of NodeDrops, operational risk disclaimers, validator slashing considerations, and liability limitations.",
+  alternates: {
+    canonical: "/terms",
+  },
   openGraph: {
     title: "Terms of Service & Operational Disclaimer — NodeDrops",
     description:
@@ -24,8 +29,16 @@ export default function TermsPage() {
     { label: "Terms of Service", href: "/terms", current: true },
   ];
 
+  const breadcrumbSchema = [
+    { name: "Home", url: "/" },
+    { name: "Terms of Service", url: "/terms" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchema)} />
+
       <div className="max-w-4xl mx-auto space-y-10">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />

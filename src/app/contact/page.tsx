@@ -2,6 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBreadcrumbSchema } from "@/lib/seo/schema";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ContactForm } from "./ContactForm";
@@ -16,6 +18,9 @@ export const metadata: Metadata = {
   title: "Contact & Content Corrections — NodeDrops",
   description:
     "Submit technical errata, report outdated blockchain client configurations, request source verification, or contact the NodeDrops infrastructure team.",
+  alternates: {
+    canonical: "/contact",
+  },
   openGraph: {
     title: "Contact & Content Corrections — NodeDrops",
     description:
@@ -30,8 +35,16 @@ export default function ContactPage() {
     { label: "Contact", href: "/contact", current: true },
   ];
 
+  const breadcrumbSchema = [
+    { name: "Home", url: "/" },
+    { name: "Contact", url: "/contact" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      {/* Structured Data */}
+      <JsonLd data={buildBreadcrumbSchema(breadcrumbSchema)} />
+
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />
