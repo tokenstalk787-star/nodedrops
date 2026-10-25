@@ -1,8 +1,8 @@
 # NodeDrops.xyz — Project Status
 
 **Current Date:** 2026-10-25  
-**Current Active Phase:** Phase 07 (Completed)  
-**Next Phase:** Phase 08 (Global Search & Discovery Polish / Admin Authentication & CMS)  
+**Current Active Phase:** Phase 08 (Completed)  
+**Next Phase:** Phase 09 (Content Policy, Verification, SEO & Analytics)  
 **Overall Status:** Green / On Track  
 
 ---
@@ -16,17 +16,14 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 - **Phase 04 (MySQL and Prisma Data Layer):** Completed, tested, and verified.
 - **Phase 05 (Network Directory and Detail Pages):** Completed, tested, and verified.
 - **Phase 06 (Node Setup Guides & Runbooks):** Completed, tested, and verified.
-- **Phase 07 (Search & Node Tools):** 100% Completed, tested, and verified.
-  - Implemented `/search` global discovery page querying real MySQL records across active networks, published guides, and node categories.
-  - Composable filters (All, Networks, Guides, Categories), debounced search input, search chips, and clean empty state with suggestions.
-  - Built 5 deterministic node tools at `/tools`:
-    1. **Hardware Requirements Checklist** (evaluated against documented network specs)
-    2. **Storage Estimation Calculator** (linear growth modeling, pruning cycles, TBW wear notice)
-    3. **Bandwidth Planning Calculator** (P2P gossip + RPC QPS, 1.5x burst factor, monthly TB egress)
-    4. **Node Operating Cost Estimator** (Home Lab CapEx vs Cloud VPS OpEx, electricity formulas, 3-year TCO)
-    5. **Pre-Flight Deployment Checklist** (interactive categorized pre-flight checks, progress meter, copy as markdown)
-  - Every tool includes variable definitions, mathematical formulas, explicit unit badges, input validation, and disclaimer alerts.
-  - Automated tests: 26/26 passed in `scripts/test-phase07.ts`. Production build succeeded with all 12 routes.
+- **Phase 07 (Search & Node Tools):** Completed, tested, and verified.
+- **Phase 08 (Secure Admin CMS & Authentication):** 100% Completed, tested, and verified.
+  - Implemented cryptographic authentication (`scrypt` password hashing + HMAC-SHA256 session cookie).
+  - Rate limiting (5 attempts / 15-minute lockout) with open-redirect mitigation.
+  - Full Admin CMS: `/admin`, `/admin/login`, `/admin/networks`, `/admin/guides`, `/admin/guides/new`, `/admin/categories`, `/admin/sources`, `/admin/reviews`.
+  - Immutable MySQL `AuditLog` recording every administrative action.
+  - Admin draft preview mode (`/guides/[slug]?preview=true`) with public 404 enforcement.
+  - Automated tests: 36/36 passed in `scripts/test-phase08.ts`. Production build succeeded with all routes.
 
 ---
 
@@ -41,10 +38,9 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 | **Phase 05** | Network Directory & Detail Pages (/networks, /testnets, /mainnets, /networks/[slug]) | **Completed** | Verified (7/7 Repo Tests, Dynamic Routes 200 OK, 404 Verified) |
 | **Phase 06** | Guide Directory & Detail Pages (/guides, /guides/[slug], /categories/[slug]) | **Completed** | Verified (18/18 Tests Passed, Draft 404 Guard, Build 0 Errors) |
 | **Phase 07** | Search & Node Tools (/search, /tools - 5 Deterministic Calculators) | **Completed** | Verified (26/26 Tests Passed, 12/12 Routes 200 OK, Build 0 Errors) |
-| **Phase 08** | Global Search & Discovery Polish | Pending | Integrated with Phase 07, queued next |
-| **Phase 09** | Admin Authentication & Content Management System | Pending | |
-| **Phase 10** | Content Policy, Verification, SEO & Analytics | Pending | |
-| **Phase 11** | End-to-End QA, Production Deployment (Vercel & MySQL) | Pending | |
+| **Phase 08** | Secure Admin CMS & Authentication (/admin, /admin/login, CMS sub-pages) | **Completed** | Verified (36/36 Tests Passed, Session HMAC Verified, Auth 307 Redirects Verified) |
+| **Phase 09** | Content Policy, Verification, SEO & Analytics | Pending | |
+| **Phase 10** | End-to-End QA, Production Deployment (Vercel & MySQL) | Pending | |
 
 ---
 

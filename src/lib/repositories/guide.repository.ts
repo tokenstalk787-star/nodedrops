@@ -167,7 +167,7 @@ export async function getAllGuides(options?: {
   });
 }
 
-export async function getGuideBySlug(slug: string) {
+export async function getGuideBySlug(slug: string, allowDrafts = false) {
   try {
     const guide = await prisma.guide.findUnique({
       where: { slug },
@@ -194,8 +194,8 @@ export async function getGuideBySlug(slug: string) {
       },
     });
 
-    // Guard: Only return if PUBLISHED
-    if (guide && guide.publicationStatus !== PublicationStatus.PUBLISHED) {
+    // Guard: Only return if PUBLISHED unless explicitly permitted (admin draft preview)
+    if (!allowDrafts && guide && guide.publicationStatus !== PublicationStatus.PUBLISHED) {
       return null;
     }
 

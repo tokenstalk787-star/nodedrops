@@ -15,10 +15,47 @@ Last Updated: 2026-10-25
 | **Phase 05** | Network Directory & Detail Pages (/networks, /testnets, /mainnets, /networks/[slug]) | **Completed** | 2026-10-25 |
 | **Phase 06** | Guide Directory & Detail Pages (/guides, /guides/[slug], /categories/[slug]) | **Completed** | 2026-10-25 |
 | **Phase 07** | Search & Node Tools (/search, /tools - 5 Deterministic Calculators) | **Completed** | 2026-10-25 |
-| **Phase 08** | Global Search & Discovery Polish | Pending | Integrated with Phase 07, queued next |
-| **Phase 09** | Admin Authentication & CMS | Pending | |
-| **Phase 10** | Content Policy, Verification, SEO & Analytics | Pending | |
-| **Phase 11** | Production Deployment (Vercel & Managed MySQL) | Pending | |
+| **Phase 08** | Secure Admin CMS & Authentication (/admin, /admin/login, /admin/networks, /admin/guides, /admin/categories, /admin/sources, /admin/reviews) | **Completed** | 2026-10-25 |
+| **Phase 09** | Content Policy, Verification, SEO & Analytics | Pending | |
+| **Phase 10** | Production Deployment (Vercel & Managed MySQL) | Pending | |
+
+---
+
+## 2. Implemented Features (Phase 08)
+
+- [x] **Secure Authentication System**:
+  - `src/lib/auth/password.ts`: Node.js native `crypto.scrypt` password hashing with 16-byte random salt and `timingSafeEqual` constant-time verification.
+  - `src/lib/auth/rateLimit.ts`: In-memory sliding rate limiter enforcing a 5-attempt limit with 15-minute lockout and IP/email keys.
+  - `src/lib/auth/session.ts`: HMAC-SHA256 session token signer/verifier, `createAdminSession()`, `getSession()`, `requireAdmin()` (redirects to `/admin/login`), `requireAdminAction()` (server mutation guard), and `logoutAdmin()`.
+  - `scripts/provision-admin.ts`: CLI provisioning script creating/updating administrative credentials with cryptographically hashed passwords.
+- [x] **Admin CMS Portal & Shell**:
+  - `/admin/login`: Dark Web3 login portal with rate-limit lockouts, form validation, and open-redirect protection.
+  - `/admin`: Real-time operational dashboard with database counts (networks, guides, drafts, sources, audits) and quick actions.
+  - `/admin/networks`: Network directory CMS with live status toggling (`ACTIVE`, `MAINTENANCE`, `DEPRECATED`) and creation modal.
+  - `/admin/guides`: Full runbook inventory with publication status controls (`PUBLISHED`, `DRAFT`, `ARCHIVED`) and draft preview buttons.
+  - `/admin/guides/new`: Rich runbook authoring form with dual-shell command blocks, live Markdown preview tab, and category/source linking.
+  - `/admin/categories`: Node role category manager.
+  - `/admin/sources`: Upstream documentation source manager with reliability scoring.
+  - `/admin/reviews`: Quality verification queue with overdue indicators (>90 days) and contact submissions manager.
+- [x] **Audit Trail System**:
+  - `src/lib/repositories/audit.repository.ts`: Immutable MySQL `AuditLog` logging every status change, creation, and publication mutation.
+- [x] **Draft Preview System**:
+  - `/guides/[slug]?preview=true`: Authenticated preview mode allowing admins to inspect draft guides before publication, with prominent warning banner. Unauthenticated public requests to drafts strictly return HTTP 404.
+
+---
+
+## 3. Verified Checks & Results
+
+- `pnpm tsx scripts/test-phase08.ts`: **Passed (36/36 tests passed)**
+- `pnpm type-check` (`tsc --noEmit`): **Passed (0 errors)**
+- `pnpm lint` (`next lint`): **Passed (0 errors, 0 warnings)**
+- `pnpm build` (`next build`): **Passed (Exit code 0, all static & dynamic routes compiled)**
+- HTTP Live Probes:
+  - `/admin/login`: **HTTP 200 OK**
+  - `/admin` (unauthenticated): **HTTP 307 Redirect to /admin/login**
+  - `/admin/guides` (unauthenticated): **HTTP 307 Redirect to /admin/login**
+  - `/guides/ethereum-mainnet-staking-draft` (unauthenticated): **HTTP 404 Not Found**
+  - `/guides/arbitrum-nitro-docker`: **HTTP 200 OK**
 
 ---
 

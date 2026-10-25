@@ -1,4 +1,5 @@
 import { PrismaClient, Role, NetworkType, NetworkStatus, ClientType, Difficulty, VerificationStatus, PublicationStatus, SourceType } from "@prisma/client";
+import { hashPassword } from "../src/lib/auth/password";
 
 const prisma = new PrismaClient();
 
@@ -6,13 +7,20 @@ async function main() {
   console.log("🌱 Starting NodeDrops database seed...");
 
   // 1. Seed Core Admin User
+  const adminPassword = process.env.ADMIN_INITIAL_PASSWORD || "Admin@NodeDrops2026!";
+  const passwordHash = await hashPassword(adminPassword);
+
   const adminUser = await prisma.user.upsert({
     where: { email: "admin@nodedrops.xyz" },
-    update: {},
+    update: {
+      passwordHash,
+      role: Role.ADMIN,
+      isActive: true,
+    },
     create: {
       email: "admin@nodedrops.xyz",
       name: "NodeDrops Infrastructure Team",
-      passwordHash: "$2b$12$e8YkYV4Q75pL/W3jYjXk.ecL9qG5z0uM7J9W0E9rU8A.examplehash", // Demonstration hash
+      passwordHash,
       role: Role.ADMIN,
       isActive: true,
     },

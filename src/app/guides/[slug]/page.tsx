@@ -7,6 +7,7 @@ import {
   getAllGuides,
   incrementGuideViewCount,
 } from "@/lib/repositories/guide.repository";
+import { getSession } from "@/lib/auth/session";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { ReviewMetadata } from "@/components/guide/ReviewMetadata";
@@ -27,13 +28,26 @@ interface GuideDetailPageProps {
   params: Promise<{
     slug: string;
   }>;
+  searchParams?: Promise<{
+    preview?: string;
+  }>;
 }
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: GuideDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const guide = await getGuideBySlug(slug);
+  const sp = searchParams ? await searchParams : {};
+  const isPreview = sp.preview === "true";
+
+  let isPrivileged = false;
+  if (isPreview) {
+    const session = await getSession();
+    isPrivileged = session?.role === "ADMIN" || session?.role === "EDITOR";
+  }
+
+  const guide = await getGuideBySlug(slug, isPrivileged);
 
   if (!guide) {
     return {
@@ -44,10 +58,14 @@ export async function generateMetadata({
 
   const primaryNetwork = guide.guideNetworks[0]?.network;
   const networkName = primaryNetwork ? ` for ${primaryNetwork.name}` : "";
+  const isDraft = guide.publicationStatus !== "PUBLISHED";
 
   return {
-    title: `${guide.title} | NodeDrops`,
+    title: isDraft
+      ? `[DRAFT PREVIEW] ${guide.title} | NodeDrops`
+      : `${guide.title} | NodeDrops`,
     description: guide.summary,
+    robots: isDraft ? { index: false, follow: false } : undefined,
     openGraph: {
       title: `${guide.title} | NodeDrops`,
       description: guide.summary,
@@ -62,16 +80,30 @@ export async function generateMetadata({
   };
 }
 
-export default async function GuideDetailPage({ params }: GuideDetailPageProps) {
+export default async function GuideDetailPage({
+  params,
+  searchParams,
+}: GuideDetailPageProps) {
   const { slug } = await params;
-  const guide = await getGuideBySlug(slug);
+  const sp = searchParams ? await searchParams : {};
+  const isPreview = sp.preview === "true";
+
+  let isPrivileged = false;
+  if (isPreview) {
+    const session = await getSession();
+    isPrivileged = session?.role === "ADMIN" || session?.role === "EDITOR";
+  }
+
+  const guide = await getGuideBySlug(slug, isPrivileged);
 
   if (!guide) {
     notFound();
   }
 
-  // Fire view count increment without blocking page response
-  incrementGuideViewCount(guide.id).catch(() => {});
+  // Fire view count increment only for published public views
+  if (guide.publicationStatus === "PUBLISHED" && !isPreview) {
+    incrementGuideViewCount(guide.id).catch(() => {});
+  }
 
   const primaryNetwork = guide.guideNetworks[0]?.network;
   const hardware = primaryNetwork?.hardwareRequirements?.[0];
@@ -94,6 +126,31 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs items={breadcrumbs} />
+
+        {/* Admin Draft Preview Notice */}
+        {guide.publicationStatus !== "PUBLISHED" && (
+          <div className="bg-amber-950/60 border border-amber-500/50 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-amber-200 shadow-xl shadow-amber-950/20 backdrop-blur-sm">
+            <div className="flex items-center space-x-3.5">
+              <Badge variant="warning" size="md">
+                Draft Preview
+              </Badge>
+              <div className="text-sm">
+                <span className="font-semibold text-white">Unpublished Runbook: </span>
+                <span className="text-amber-200/90">
+                  This guide is currently in <strong className="text-amber-300 font-bold uppercase">{guide.publicationStatus}</strong> status and is not visible to public users or search crawlers.
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3 shrink-0">
+              <Link
+                href="/admin/guides"
+                className="inline-flex items-center px-3.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold transition-colors"
+              >
+                &larr; Return to Admin CMS
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Guide Header Banner */}
         <header className="space-y-4">
