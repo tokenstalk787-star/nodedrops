@@ -1,8 +1,8 @@
 # NodeDrops.xyz — Project Status
 
 **Current Date:** 2026-10-25  
-**Current Active Phase:** Phase 08 (Completed)  
-**Next Phase:** Phase 09 (Content Policy, Verification, SEO & Analytics)  
+**Current Active Phase:** Phase 09 (Completed)  
+**Next Phase:** Phase 10 (End-to-End QA & Production Deployment)  
 **Overall Status:** Green / On Track  
 
 ---
@@ -17,13 +17,13 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 - **Phase 05 (Network Directory and Detail Pages):** Completed, tested, and verified.
 - **Phase 06 (Node Setup Guides & Runbooks):** Completed, tested, and verified.
 - **Phase 07 (Search & Node Tools):** Completed, tested, and verified.
-- **Phase 08 (Secure Admin CMS & Authentication):** 100% Completed, tested, and verified.
-  - Implemented cryptographic authentication (`scrypt` password hashing + HMAC-SHA256 session cookie).
-  - Rate limiting (5 attempts / 15-minute lockout) with open-redirect mitigation.
-  - Full Admin CMS: `/admin`, `/admin/login`, `/admin/networks`, `/admin/guides`, `/admin/guides/new`, `/admin/categories`, `/admin/sources`, `/admin/reviews`.
-  - Immutable MySQL `AuditLog` recording every administrative action.
-  - Admin draft preview mode (`/guides/[slug]?preview=true`) with public 404 enforcement.
-  - Automated tests: 36/36 passed in `scripts/test-phase08.ts`. Production build succeeded with all routes.
+- **Phase 08 (Secure Admin CMS & Authentication):** Completed, tested, and verified.
+- **Phase 09 (Public Pages & Contact):** 100% Completed, tested, and verified.
+  - Implemented `/about`, `/methodology`, `/contact`, `/privacy`, `/terms`.
+  - Server-side validated contact form with MySQL persistence, honeypot bot trap, and sliding rate limiter.
+  - Transparent documentation of data privacy, source tiering hierarchy, and operator risk terms.
+  - Fixed and connected all footer links and mobile navigation quick links.
+  - Automated tests: 30/30 passed in `scripts/test-phase09.ts`. Production build succeeded with all 17 routes.
 
 ---
 
@@ -39,7 +39,7 @@ NodeDrops.xyz is an educational and research-first Web3 blockchain node director
 | **Phase 06** | Guide Directory & Detail Pages (/guides, /guides/[slug], /categories/[slug]) | **Completed** | Verified (18/18 Tests Passed, Draft 404 Guard, Build 0 Errors) |
 | **Phase 07** | Search & Node Tools (/search, /tools - 5 Deterministic Calculators) | **Completed** | Verified (26/26 Tests Passed, 12/12 Routes 200 OK, Build 0 Errors) |
 | **Phase 08** | Secure Admin CMS & Authentication (/admin, /admin/login, CMS sub-pages) | **Completed** | Verified (36/36 Tests Passed, Session HMAC Verified, Auth 307 Redirects Verified) |
-| **Phase 09** | Content Policy, Verification, SEO & Analytics | Pending | |
+| **Phase 09** | Public Pages & Contact (/about, /methodology, /contact, /privacy, /terms) | **Completed** | Verified (30/30 Tests Passed, Form Rate-Limit & Spam Trap Verified, Build 17/17 OK) |
 | **Phase 10** | End-to-End QA, Production Deployment (Vercel & MySQL) | Pending | |
 
 ---

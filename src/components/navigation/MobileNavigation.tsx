@@ -110,6 +110,33 @@ export function MobileNavigation({ items = MAIN_NAV_ITEMS }: MobileNavigationPro
                 );
               })}
             </nav>
+
+            {/* Quick Secondary Links */}
+            <div className="pt-2 border-t border-slate-800/80">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2 px-1">
+                Platform Resources
+              </span>
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <Link
+                  href="/about"
+                  className="p-2.5 rounded-lg bg-[#0e1424] border border-slate-800/60 text-slate-300 hover:text-white text-center font-medium"
+                >
+                  About
+                </Link>
+                <Link
+                  href="/methodology"
+                  className="p-2.5 rounded-lg bg-[#0e1424] border border-slate-800/60 text-slate-300 hover:text-white text-center font-medium"
+                >
+                  Methodology
+                </Link>
+                <Link
+                  href="/contact"
+                  className="p-2.5 rounded-lg bg-[#0e1424] border border-slate-800/60 text-slate-300 hover:text-white text-center font-medium"
+                >
+                  Contact
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="p-6 border-t border-slate-800/80 bg-[#07090f]">

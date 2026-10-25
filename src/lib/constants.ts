@@ -16,24 +16,24 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
 export const FOOTER_LINKS = {
   ecosystem: [
     { label: "Ethereum", href: "/networks/ethereum" },
-    { label: "Arbitrum", href: "/networks/arbitrum" },
-    { label: "Optimism", href: "/networks/optimism" },
+    { label: "Arbitrum One", href: "/networks/arbitrum-one" },
     { label: "Base", href: "/networks/base" },
     { label: "Solana", href: "/networks/solana" },
+    { label: "Holesky Testnet", href: "/networks/holesky" },
   ],
   resources: [
-    { label: "Node Requirements", href: "/guides/node-requirements" },
-    { label: "RPC Endpoints", href: "/tools/rpc" },
-    { label: "Security Checklist", href: "/guides/security" },
-    { label: "Troubleshooting", href: "/guides/troubleshooting" },
-    { label: "Verification Policy", href: "/verification-policy" },
+    { label: "Hardware Checklist", href: "/tools?tab=hardware" },
+    { label: "Storage Calculator", href: "/tools?tab=storage" },
+    { label: "Bandwidth Planner", href: "/tools?tab=bandwidth" },
+    { label: "Cost Estimator", href: "/tools?tab=cost" },
+    { label: "Deployment Checklist", href: "/tools?tab=checklist" },
   ],
   platform: [
     { label: "About NodeDrops", href: "/about" },
-    { label: "Editorial Policy", href: "/editorial-policy" },
-    { label: "Design System", href: "/design-system" },
-    { label: "Terms of Service", href: "/terms" },
+    { label: "Content Methodology", href: "/methodology" },
+    { label: "Contact & Errata", href: "/contact" },
     { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
   ],
 };
 

@@ -16,8 +16,41 @@ Last Updated: 2026-10-25
 | **Phase 06** | Guide Directory & Detail Pages (/guides, /guides/[slug], /categories/[slug]) | **Completed** | 2026-10-25 |
 | **Phase 07** | Search & Node Tools (/search, /tools - 5 Deterministic Calculators) | **Completed** | 2026-10-25 |
 | **Phase 08** | Secure Admin CMS & Authentication (/admin, /admin/login, /admin/networks, /admin/guides, /admin/categories, /admin/sources, /admin/reviews) | **Completed** | 2026-10-25 |
-| **Phase 09** | Content Policy, Verification, SEO & Analytics | Pending | |
-| **Phase 10** | Production Deployment (Vercel & Managed MySQL) | Pending | |
+| **Phase 09** | Public Pages & Contact (/about, /methodology, /contact, /privacy, /terms) | **Completed** | 2026-10-25 |
+| **Phase 10** | End-to-End QA & Production Deployment (Vercel & MySQL) | Pending | |
+
+---
+
+## 2. Implemented Features (Phase 09)
+
+- [x] **Public Informational & Policy Pages**:
+  - `/about`: Complete narrative detailing platform vision, intended audience (solo stakers, devops engineers, researchers), educational non-commercial principles, and tech stack transparency.
+  - `/methodology`: Exhaustive explanation of source tiering hierarchy (Tier 1 Canonical, Tier 2 Foundation, Tier 3 Releases), verification status taxonomy (`OFFICIAL_DOCS_VERIFIED`, `SETUP_TESTED`, `COMMUNITY_REPORTED`, `UNDER_REVIEW`), 90-day review cycles, errata workflow, and guide retirement protocol.
+  - `/contact`: Dedicated contact portal featuring accessible React 19 `useActionState` form, category dropdown, server-side Zod validation, sliding-window rate limiting, and hidden honeypot bot trap.
+  - `/privacy`: Honest, factual documentation matching codebase behavior: zero third-party advertising trackers, essential-only admin session cookies (`nodedrops_admin_session`), safe MySQL contact storage, anonymous aggregated view counters, and deletion request procedures.
+  - `/terms`: Clear operational terms disclaiming warranties, detailing hardware wear risks (SSD TBW), non-custodial key safety warnings, validator slashing notices, and calculator capacity planning assumptions.
+- [x] **Contact Server Action & Database Persistence**:
+  - `src/lib/actions/contact.actions.ts`: Robust server action with Zod schema, IP abuse detection, rate limiting, and safe persistence to `prisma.contactSubmission` with `status: PENDING`.
+  - Transparent processing: Success is reported only when the record is physically committed to MySQL; honeypot bot submissions are dropped without database writes.
+- [x] **Navigation & Footer Link Integrity**:
+  - Cleaned and updated `FOOTER_LINKS` in `src/lib/constants.ts` to link to all live routes (`/about`, `/methodology`, `/contact`, `/privacy`, `/terms`) and tools (`/tools?tab=...`).
+  - Added mobile secondary quick navigation buttons in `MobileNavigation.tsx`.
+
+---
+
+## 3. Verified Checks & Results
+
+- `pnpm tsx scripts/test-phase09.ts`: **Passed (30/30 tests passed)**
+- `pnpm tsx scripts/test-phase08.ts`: **Passed (36/36 tests passed)**
+- `pnpm type-check` (`tsc --noEmit`): **Passed (0 errors)**
+- `pnpm lint` (`next lint`): **Passed (0 errors, 0 warnings)**
+- `pnpm build` (`next build`): **Passed (Exit code 0, 17/17 routes generated)**
+- Live HTTP Probes on Production Server:
+  - `GET /about` &rarr; **HTTP 200 OK**
+  - `GET /methodology` &rarr; **HTTP 200 OK**
+  - `GET /contact` &rarr; **HTTP 200 OK**
+  - `GET /privacy` &rarr; **HTTP 200 OK**
+  - `GET /terms` &rarr; **HTTP 200 OK**
 
 ---
 
