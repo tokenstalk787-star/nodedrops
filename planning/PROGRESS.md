@@ -12,8 +12,8 @@ Last Updated: 2026-10-25
 | **Phase 02** | Design Tokens, Theming & Reusable Components | **Completed** | 2026-10-25 |
 | **Phase 03** | NodeDrops Homepage & Destination Routing | **Completed** | 2026-10-25 |
 | **Phase 04** | Database Architecture (Prisma, MySQL, Schema & Seed) | **Completed** | 2026-10-25 |
-| **Phase 05** | Public Directories (/testnets, /mainnets, /networks, /guides) | Pending | Queued next |
-| **Phase 06** | Detail Pages (/networks/[slug], /guides/[slug], /categories/[slug]) | Pending | |
+| **Phase 05** | Network Directory & Detail Pages (/networks, /testnets, /mainnets, /networks/[slug]) | **Completed** | 2026-10-25 |
+| **Phase 06** | Guide Directory & Detail Pages (/guides, /guides/[slug]) | Pending | Queued next |
 | **Phase 07** | Interactive Tools (/tools - RPC Tester, Hardware Calc) | Pending | |
 | **Phase 08** | Global Search & Discovery Engine | Pending | |
 | **Phase 09** | Admin Authentication & CMS | Pending | |
@@ -22,41 +22,37 @@ Last Updated: 2026-10-25
 
 ---
 
-## 2. Implemented Features (Phase 04)
+## 2. Implemented Features (Phase 05)
 
-- [x] Local MySQL 8.0 instance inspected and connected on port 3306 (`nodedrops` database).
-- [x] Prisma 6.19.3 configured with MySQL provider and schema engine.
-- [x] Normalized relational database schema in `prisma/schema.prisma` with 12 application models and enums:
-  - `User` & `Role` (Admin/Editor/Viewer)
-  - `Category` (Full Nodes, Validator Nodes, Archive Nodes, RPC Nodes, Sequencers)
-  - `Network` (EVM, Non-EVM, Layer 1, Layer 2, status, hardware specs)
-  - `ClientSoftware` (Execution/Consensus/Combined/Sequencer software)
-  - `HardwareRequirement` (Empirical CPU, RAM, NVMe storage, and network profiles)
-  - `Guide` (Runbooks with difficulty, verification status, and publication status)
-  - `Source` (Official upstream documentation and client repo references)
-  - Junction tables: `NetworkGuide`, `GuideSource`, `NetworkSource`
-  - Utility tables: `ContactSubmission`, `AuditLog`
-- [x] Unique constraints, foreign keys, cascade/restrict deletion rules, and query indexes.
-- [x] Environment variable parsing and validation with Zod (`src/lib/env.ts`).
-- [x] Prisma client singleton pattern (`src/lib/prisma.ts`).
-- [x] Database health check function (`src/lib/db-check.ts`).
-- [x] Idempotent seed script (`prisma/seed.ts`) populating verified networks, clients, hardware, sources, and guides without false "Setup Tested" marks.
-- [x] Database repository modules in `src/lib/repositories/` (`network`, `guide`, `category`, `submission`, `audit`).
-- [x] Comprehensive database integration test suite (`scripts/test-db.ts`) verifying connectivity, relational queries, invalid data rejection, and submission write operations.
+- [x] Connected `/networks` directory to live MySQL database with server-side pagination, search, category, role, and sorting.
+- [x] Connected `/testnets` directory to live MySQL database filtering exclusively by `NetworkType.TESTNET`.
+- [x] Connected `/mainnets` directory to live MySQL database filtering exclusively by `NetworkType.MAINNET`.
+- [x] Implemented dynamic detail route `/networks/[slug]` with database fetching, `generateMetadata`, and clean `notFound()` handling for unknown slugs.
+- [x] Built reusable network components:
+  - `NetworkCard`: Responsive card with hardware snippet, client packages, runbook count.
+  - `NetworkList`: Grid layout with empty state fallback and pagination controls.
+  - `NetworkFilters`: Multi-attribute filter toolbar (Type, Category, Node Role, Sort).
+  - `NetworkSearch`: Client-side search input maintaining active URL parameters.
+  - `NetworkTypeBadge` & `EcosystemBadge`: Visual badges for classification.
+  - `VerificationStatusBadge`: Accurate verification status indicators without falsified tests.
+  - `NetworkOverview`: Detail hero with official links and mainnet risk notices.
+  - `NetworkTechnicalDetails`: Chain parameters, client software table, empirical hardware profiles (gracefully hiding EVM fields for non-EVM chains like Solana).
+  - `OfficialSources`: Verified upstream references with reliability ratings.
+  - `RelatedGuides`: Runbooks and guides linked to the network.
 
 ---
 
 ## 3. Verified Checks & Results
 
-- `pnpm prisma validate`: **Passed (Schema valid)**
-- `pnpm prisma migrate dev` / `db push`: **Passed (12 tables created in MySQL `nodedrops`)**
-- `pnpm prisma db seed`: **Passed (Idempotency verified across multiple executions)**
-- `npx tsx scripts/test-db.ts`: **Passed (5/5 tests passed)**:
-  - 1. Connection Health: ✅ PASS (`{"networks":5,"guides":2,"categories":5,"sources":6,"users":1}`)
-  - 2. Read Networks & Relations: ✅ PASS (Ethereum clients & hardware profiles queried)
-  - 3. Read Guides & Relations: ✅ PASS (Guides with sources linked)
-  - 4. Invalid Data Rejection: ✅ PASS (Duplicate slug rejected by MySQL unique index)
-  - 5. Contact Submission Write & Cleanup: ✅ PASS
+- `npx tsx scripts/test-phase05.ts`: **Passed (7/7 tests passed)**
 - `pnpm type-check` (`tsc --noEmit`): **Passed (0 errors)**
 - `pnpm lint` (`next lint`): **Passed (0 errors, 0 warnings)**
-- `pnpm build` (`next build`): **Passed (Exit code 0, 11/11 static/dynamic pages compiled)**
+- `pnpm build` (`next build`): **Passed (Exit code 0, 11/11 routes generated)**
+- Route Probes (`Invoke-WebRequest`):
+  - `/networks`: **HTTP 200 OK (70,964 bytes)**
+  - `/testnets`: **HTTP 200 OK (48,540 bytes)**
+  - `/mainnets`: **HTTP 200 OK (65,457 bytes)**
+  - `/networks/ethereum`: **HTTP 200 OK (66,217 bytes)**
+  - `/networks/solana`: **HTTP 200 OK (62,704 bytes)**
+  - `/networks/arbitrum-one`: **HTTP 200 OK (67,873 bytes)**
+  - `/networks/non-existent-network`: **HTTP 404 Not Found (Verified)**

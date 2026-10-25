@@ -3,20 +3,58 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";
-import { FEATURED_NETWORKS } from "@/data/mock-homepage";
-import { ArrowRight, Flame } from "lucide-react";
+import { NetworkSearch } from "@/components/network/NetworkSearch";
+import { NetworkFilters } from "@/components/network/NetworkFilters";
+import { NetworkList } from "@/components/network/NetworkList";
+import {
+  getPaginatedNetworks,
+  getNetworkFilterOptions,
+} from "@/lib/repositories/network.repository";
+import { NetworkType } from "@prisma/client";
+import { Flame } from "lucide-react";
 
 export const metadata = {
-  title: "Testnets Directory — NodeDrops",
-  description: "Discover active public testnets, faucet resources, and risk-free validator testing environments.",
+  title: "Public Testnets Directory — NodeDrops",
+  description:
+    "Test validator configurations, client upgrades, and node operations with testnet assets on public blockchain testnets.",
 };
 
-export default function TestnetsPage() {
-  const testnets = FEATURED_NETWORKS.filter((n) => n.type === "Testnet");
+export default async function TestnetsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{
+    q?: string;
+    category?: string;
+    role?: string;
+    sort?: string;
+    page?: string;
+  }>;
+}) {
+  const resolvedParams = searchParams ? await searchParams : {};
+
+  const query = resolvedParams.q || "";
+  const category = resolvedParams.category || undefined;
+  const nodeRole = resolvedParams.role || undefined;
+  const sortBy = (resolvedParams.sort as "name_asc" | "name_desc" | "newest" | "featured") || "featured";
+  const page = parseInt(resolvedParams.page || "1", 10) || 1;
+
+  // Query MySQL strictly for Testnets
+  const [paginatedResult, filterOptions] = await Promise.all([
+    getPaginatedNetworks({
+      query,
+      type: NetworkType.TESTNET,
+      category,
+      nodeRole,
+      sortBy,
+      page,
+      pageSize: 9,
+    }),
+    getNetworkFilterOptions(),
+  ]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Page Header */}
       <div className="space-y-3 pb-6 border-b border-slate-800">
         <Breadcrumbs items={[{ label: "Testnets", href: "/testnets" }]} />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -26,7 +64,7 @@ export default function TestnetsPage() {
               <Badge variant="cyan" size="sm" withDot withPing>Live</Badge>
             </h1>
             <p className="text-sm text-slate-400 mt-1">
-              Test validator configurations, client upgrades, and node operations with testnet assets before deploying to mainnet.
+              Verify client upgrades, deposit validator keys, and test node infrastructure with zero economic risk before deploying to mainnet.
             </p>
           </div>
           <Link href="/guides">
@@ -37,41 +75,23 @@ export default function TestnetsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {testnets.map((net) => (
-          <Card key={net.id} hoverable glow="cyan">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <Badge variant="cyan" size="sm" withDot>
-                  {net.ecosystem} Testnet
-                </Badge>
-                <span className="text-xs font-mono text-cyan-400">{net.syncStatus}</span>
-              </div>
-              <CardTitle className="mt-3">{net.name}</CardTitle>
-              <CardDescription>Category: {net.category}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 text-xs text-slate-300 font-mono">
-              <div className="p-3 rounded-lg bg-[#07090f] border border-slate-800 space-y-1">
-                <div><span className="text-slate-500">Storage:</span> {net.minHardware.storage}</div>
-                <div><span className="text-slate-500">RAM:</span> {net.minHardware.ram}</div>
-                <div><span className="text-slate-500">CPU:</span> {net.minHardware.cpu}</div>
-              </div>
-              <div className="text-slate-400 font-sans">
-                <span className="font-semibold text-slate-300">Supported Clients: </span>
-                {net.primaryClients.join(", ")}
-              </div>
-            </CardContent>
-            <CardFooter>
-              <span className="text-xs text-slate-400 font-sans">{net.guidesCount} setup guides</span>
-              <Link href="/guides">
-                <Button size="sm" variant="ghost" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                  Start Node
-                </Button>
-              </Link>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+      {/* Search Bar */}
+      <NetworkSearch placeholder="Search testnets (e.g. Holesky, Sepolia)..." />
+
+      {/* Filters (Type filter hidden since this view is testnets-only) */}
+      <NetworkFilters
+        categories={filterOptions.categories}
+        nodeRoles={filterOptions.nodeRoles}
+        hideTypeFilter
+      />
+
+      {/* Database-Backed Network Grid */}
+      <NetworkList
+        networks={paginatedResult.networks}
+        total={paginatedResult.total}
+        totalPages={paginatedResult.totalPages}
+        currentPage={paginatedResult.currentPage}
+      />
     </div>
   );
 }
