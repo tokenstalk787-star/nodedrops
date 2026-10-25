@@ -1,49 +1,53 @@
 # NodeDrops.xyz — Implementation Log
 
-## Phase 03: NodeDrops Homepage & Destination Routing (2026-10-25)
+## Phase 04: MySQL and Prisma Data Layer (2026-10-25)
 
 ### Files Created:
-1. `src/data/mock-homepage.ts` — Strongly-typed temporary dataset module containing:
-   - `ECOSYSTEMS_DATA` (Ethereum, Arbitrum, Optimism, Base, Solana, Polygon).
-   - `FEATURED_NETWORKS` (Mainnets and Testnets with CPU, RAM, NVMe specs, client pairs, sync status).
-   - `LATEST_GUIDES` (Runbooks with difficulty, duration, verification date, and network associations).
-   - `NODE_TYPES_DATA` (Full node, Validator node, Archive node, RPC node, Sequencer taxonomies).
-   - `VERIFICATION_PILLARS` (Core research methodology specifications).
-2. `src/components/home/HomeSearch.tsx` — Prominent hero search input with `⌘K` / `Ctrl+K` global keyboard listener, clear action, quick suggestion pills, and query routing to `/networks?q=...`.
-3. `src/app/networks/page.tsx` — Working destination route for networks with dynamic query filtering and hardware cards.
-4. `src/app/testnets/page.tsx` — Working destination route for public testnets with live badges and hardware requirements.
-5. `src/app/mainnets/page.tsx` — Working destination route for production mainnets.
-6. `src/app/guides/page.tsx` — Working destination route for deployment runbooks with difficulty and time estimates.
-7. `src/app/tools/page.tsx` — Working destination route for node operator utilities roadmap.
+1. `prisma/schema.prisma` — Normalized relational schema defining:
+   - `User` and `Role` (`ADMIN`, `EDITOR`, `VIEWER`).
+   - `Category` for node-type and topic classifications.
+   - `Network` (Layer 1/2, consensus, status, links, hardware requirements).
+   - `ClientSoftware` (Execution/Consensus/Combined/Sequencer software).
+   - `HardwareRequirement` (Empirical CPU, RAM, NVMe storage, and network profiles).
+   - `Guide` (Runbooks with difficulty, verification status, and publication workflow).
+   - `Source` (Upstream documentation and client repo references).
+   - Junction tables: `NetworkGuide`, `GuideSource`, `NetworkSource`.
+   - Utility tables: `ContactSubmission`, `AuditLog`.
+2. `prisma/migrations/20261025115003_init_normalized_schema/migration.sql` — Initial database DDL migration applied to MySQL.
+3. `prisma/seed.ts` — Idempotent seed script using `upsert` to populate initial verified ecosystems, networks, clients, hardware profiles, guides, sources, and admin user.
+4. `src/lib/env.ts` — Runtime environment variable validation using Zod.
+5. `src/lib/prisma.ts` — Prisma client singleton pattern preventing connection leaks in Next.js development mode.
+6. `src/lib/db-check.ts` — Database health check utility returning connectivity and entity record counts.
+7. `src/lib/repositories/network.repository.ts` — Data access functions for networks (`getAllNetworks`, `getNetworkBySlug`, `searchNetworks`).
+8. `src/lib/repositories/guide.repository.ts` — Data access functions for guides (`getAllGuides`, `getGuideBySlug`, `getGuidesByNetworkSlug`).
+9. `src/lib/repositories/category.repository.ts` — Data access functions for categories (`getAllCategories`, `getCategoryBySlug`).
+10. `src/lib/repositories/submission.repository.ts` — Data access functions for inquiries (`createContactSubmission`, `getPendingSubmissions`).
+11. `src/lib/repositories/audit.repository.ts` — Data access functions for audit logs (`createAuditLog`, `getRecentAuditLogs`).
+12. `scripts/test-db.ts` — Database verification script testing connectivity, relational reads, invalid data rejection, and submission writes.
 
 ### Files Modified:
-- `src/app/page.tsx` — Rebuilt from scratch as a server-rendered homepage (RSC) containing all 12 required sections:
-  1. Sticky SiteHeader and navigation.
-  2. Hero title: "Your Guide to Running Blockchain Nodes".
-  3. Supporting text explaining the research and guide platform.
-  4. Prominent global search input (`HomeSearch`).
-  5. Primary actions ("Explore Testnets", "Explore Mainnets", "Browse Runbooks").
-  6. Ecosystem browsing matrix (6 major chains with symbol, layer, and node estimates).
-  7. Featured networks with real hardware profiles.
-  8. Latest deployment guides with verified timestamps.
-  9. Node-type classification taxonomy cards (Full, Validator, Archive, RPC, Sequencer).
-  10. Content verification methodology section (4 research pillars).
-  11. Final call-to-action banner with dual CTA buttons.
-  12. SiteFooter with multi-column ecosystem links and security notice.
+- `package.json` — Added `prisma.seed` configuration command (`tsx prisma/seed.ts`) and `tsx` dependency.
+- `pnpm-workspace.yaml` — Approved `esbuild` build script for `tsx`.
 
 ### Verification Commands & Results:
+- `pnpm prisma validate`: **Passed (Schema valid)**.
+- `pnpm prisma migrate dev` / `db push`: **Passed (12 tables created in MySQL `nodedrops`)**.
+- `pnpm prisma db seed`: **Passed with 0 errors (Idempotency verified on duplicate run)**.
+- `npx tsx scripts/test-db.ts`: **Passed (5/5 tests passed)**:
+  1. Connection Health: ✅ PASS (5 networks, 2 guides, 5 categories, 6 sources, 1 user)
+  2. Read Networks & Relations: ✅ PASS (Ethereum clients & hardware profiles queried)
+  3. Read Guides & Relations: ✅ PASS (Guides with sources linked)
+  4. Invalid Data Rejection: ✅ PASS (Duplicate slug rejected by MySQL unique index)
+  5. Contact Submission Write & Cleanup: ✅ PASS
 - `pnpm type-check` (`tsc --noEmit`): **Passed with 0 errors**.
 - `pnpm lint` (`next lint`): **Passed with 0 errors and 0 warnings**.
-- `pnpm build` (`next build`): **Passed with code 0** (Generated all 11 static and dynamic routes).
-- Local Route Probes:
-  - `http://localhost:3000/` — **HTTP 200 OK (186,161 bytes)**.
-  - `http://localhost:3000/networks` — **HTTP 200 OK (66,356 bytes)**.
-  - `http://localhost:3000/testnets` — **HTTP 200 OK (45,917 bytes)**.
-  - `http://localhost:3000/mainnets` — **HTTP 200 OK (56,459 bytes)**.
-  - `http://localhost:3000/guides` — **HTTP 200 OK (60,218 bytes)**.
-  - `http://localhost:3000/tools` — **HTTP 200 OK (49,060 bytes)**.
-  - `http://localhost:3000/design-system` — **HTTP 200 OK (77,759 bytes)**.
-  - `http://localhost:3000/networks?q=Ethereum` — **HTTP 200 OK (42,880 bytes)**.
+- `pnpm build` (`next build`): **Passed with code 0** (All 11 static and dynamic routes compiled).
+
+---
+
+## Phase 03: NodeDrops Homepage & Destination Routing (2026-10-25)
+
+*(Recorded in git commit `c59dfbf`)*
 
 ---
 

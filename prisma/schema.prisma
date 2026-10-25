@@ -1,0 +1,312 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum NetworkType {
+  MAINNET
+  TESTNET
+}
+
+enum NetworkStatus {
+  ACTIVE
+  MAINTENANCE
+  DEPRECATED
+}
+
+enum ClientType {
+  EXECUTION
+  CONSENSUS
+  COMBINED
+  SEQUENCER
+  LIGHT_CLIENT
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum VerificationStatus {
+  SETUP_TESTED
+  OFFICIAL_DOCS_VERIFIED
+  COMMUNITY_REPORTED
+  UNDER_REVIEW
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SourceType {
+  OFFICIAL_DOCS
+  UPSTREAM_REPO
+  SPECIFICATION
+  AUDIT_REPORT
+}
+
+enum SubmissionStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
+
+// =============================================================================
+// MODELS
+// =============================================================================
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  role         Role       @default(VIEWER)
+  avatarUrl    String?
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  authoredGuides Guide[]
+  auditLogs      AuditLog[]
+
+  @@index([role])
+  @@index([email])
+}
+
+model Category {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  description  String?  @db.Text
+  icon         String?
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  guides Guide[]
+
+  @@index([slug])
+  @@index([displayOrder])
+}
+
+model Network {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  symbol       String
+  chainId      String?
+  networkType  NetworkType   @default(MAINNET)
+  category     String        @default("Layer 1")
+  layer        String        @default("Layer 1")
+  consensus    String        @default("Proof-of-Stake")
+  status       NetworkStatus @default(ACTIVE)
+  websiteUrl   String?
+  docsUrl      String?
+  githubUrl    String?
+  explorerUrl  String?
+  rpcUrl       String?
+  isFeatured   Boolean       @default(false)
+  sortOrder    Int           @default(0)
+  metadata     Json?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  clients              ClientSoftware[]
+  hardwareRequirements HardwareRequirement[]
+  networkGuides        NetworkGuide[]
+  networkSources       NetworkSource[]
+
+  @@index([slug])
+  @@index([networkType])
+  @@index([status])
+  @@index([isFeatured])
+}
+
+model ClientSoftware {
+  id                 String     @id @default(cuid())
+  networkId          String
+  name               String
+  language           String
+  clientType         ClientType @default(EXECUTION)
+  repoUrl            String?
+  docsUrl            String?
+  recommendedVersion String?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  network Network @relation(fields: [networkId], references: [id], onDelete: Cascade)
+
+  @@index([networkId])
+  @@index([clientType])
+}
+
+model HardwareRequirement {
+  id            String   @id @default(cuid())
+  networkId     String
+  nodeType      String   @default("Full Node")
+  minCpu        String
+  recCpu        String
+  minRamGb      Int
+  recRamGb      Int
+  minStorageGb  Int
+  recStorageGb  Int
+  storageType   String   @default("NVMe SSD")
+  bandwidthMbps Int      @default(100)
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  network Network @relation(fields: [networkId], references: [id], onDelete: Cascade)
+
+  @@index([networkId])
+  @@index([nodeType])
+}
+
+model Guide {
+  id                 String             @id @default(cuid())
+  title              String
+  slug               String             @unique
+  summary            String             @db.Text
+  content            String             @db.MediumText
+  difficulty         Difficulty         @default(BEGINNER)
+  estimatedMinutes   Int                @default(30)
+  authorId           String?
+  categoryId         String?
+  verificationStatus VerificationStatus @default(OFFICIAL_DOCS_VERIFIED)
+  publicationStatus  PublicationStatus  @default(PUBLISHED)
+  verifiedAt         DateTime?
+  viewCount          Int                @default(0)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  author       User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  category     Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  guideNetworks NetworkGuide[]
+  guideSources GuideSource[]
+
+  @@index([slug])
+  @@index([difficulty])
+  @@index([verificationStatus])
+  @@index([publicationStatus])
+  @@index([authorId])
+  @@index([categoryId])
+}
+
+model Source {
+  id               String     @id @default(cuid())
+  name             String
+  url              String     @unique @db.VarChar(512)
+  sourceType       SourceType @default(OFFICIAL_DOCS)
+  reliabilityScore Int        @default(100)
+  lastAccessedAt   DateTime?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  guideSources    GuideSource[]
+  networkSources  NetworkSource[]
+
+  @@index([sourceType])
+  @@index([name])
+}
+
+// =============================================================================
+// JUNCTION TABLES
+// =============================================================================
+
+model NetworkGuide {
+  id        String   @id @default(cuid())
+  networkId String
+  guideId   String
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  network Network @relation(fields: [networkId], references: [id], onDelete: Cascade)
+  guide   Guide   @relation(fields: [guideId], references: [id], onDelete: Cascade)
+
+  @@unique([networkId, guideId])
+  @@index([networkId])
+  @@index([guideId])
+}
+
+model GuideSource {
+  id        String   @id @default(cuid())
+  guideId   String
+  sourceId  String
+  notes     String?
+  createdAt DateTime @default(now())
+
+  guide  Guide  @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  source Source @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@unique([guideId, sourceId])
+  @@index([guideId])
+  @@index([sourceId])
+}
+
+model NetworkSource {
+  id           String   @id @default(cuid())
+  networkId    String
+  sourceId     String
+  relationship String?  @default("Official Documentation")
+  createdAt    DateTime @default(now())
+
+  network Network @relation(fields: [networkId], references: [id], onDelete: Cascade)
+  source  Source  @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@unique([networkId, sourceId])
+  @@index([networkId])
+  @@index([sourceId])
+}
+
+// =============================================================================
+// UTILITY & AUDIT TABLES
+// =============================================================================
+
+model ContactSubmission {
+  id        String           @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String           @db.Text
+  status    SubmissionStatus @default(PENDING)
+  ipAddress String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([status])
+  @@index([email])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([entityType])
+}
