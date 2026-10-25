@@ -32,7 +32,8 @@ export function NetworkSearch({
       params.delete("q");
     }
     params.delete("page"); // Reset page when query changes
-    router.push(`${pathname}?${params.toString()}`);
+    const basePath = pathname || "/networks";
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -34,11 +34,12 @@ export function NetworkFilters({
       params.delete(key);
     }
     params.delete("page"); // Reset page when filters change
-    router.push(`${pathname}?${params.toString()}`);
+    const basePath = pathname || "/networks";
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const resetAll = () => {
-    router.push(pathname);
+    router.push(pathname || "/networks");
   };
 
   const hasActiveFilters =

@@ -15,6 +15,7 @@ export interface MobileNavigationProps {
 export function MobileNavigation({ items = MAIN_NAV_ITEMS }: MobileNavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const currentPath = pathname ?? "";
 
   // Close menu automatically whenever route changes
   useEffect(() => {
@@ -70,7 +71,7 @@ export function MobileNavigation({ items = MAIN_NAV_ITEMS }: MobileNavigationPro
             <nav aria-label="Mobile Navigation" className="space-y-2">
               {items.map((item) => {
                 const isActive =
-                  pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                  currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
 
                 return (
                   <Link

@@ -27,11 +27,12 @@ export function NetworkList({
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
-    router.push(`${pathname}?${params.toString()}`);
+    const basePath = pathname || "/networks";
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const handleReset = () => {
-    router.push(pathname);
+    router.push(pathname || "/networks");
   };
 
   if (networks.length === 0) {

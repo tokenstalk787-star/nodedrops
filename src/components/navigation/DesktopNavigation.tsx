@@ -16,6 +16,7 @@ export function DesktopNavigation({
   items = MAIN_NAV_ITEMS,
 }: DesktopNavigationProps) {
   const pathname = usePathname();
+  const currentPath = pathname ?? "";
 
   return (
     <nav
@@ -25,7 +26,7 @@ export function DesktopNavigation({
     >
       {items.map((item) => {
         const isActive =
-          pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+          currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
 
         return (
           <Link

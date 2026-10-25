@@ -28,11 +28,12 @@ export function GuideFilters({ categories, networks }: GuideFiltersProps) {
       params.delete(key);
     }
     params.delete("page");
-    router.push(`${pathname}?${params.toString()}`);
+    const basePath = pathname || "/guides";
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const resetAll = () => {
-    router.push(pathname);
+    router.push(pathname || "/guides");
   };
 
   const hasActiveFilters =
