@@ -78,10 +78,25 @@ export default async function AdminGuidesPage() {
               {guides.map((guide) => (
                 <tr key={guide.id} className="hover:bg-slate-800/20 transition-colors">
                   <td className="py-3.5 px-4 font-sans font-semibold text-white max-w-xs">
-                    <div className="truncate">{guide.title}</div>
-                    <span className="text-[11px] text-slate-500 font-mono block">
-                      slug: {guide.slug}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      {guide.logoUrl || guide.guideNetworks[0]?.network?.logoUrl ? (
+                        <img
+                          src={guide.logoUrl || guide.guideNetworks[0]?.network?.logoUrl || ""}
+                          alt={guide.title}
+                          className="w-8 h-8 rounded-lg object-contain bg-[#070b16] border border-cyan-500/30 p-1 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.15)]"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-lg bg-cyan-950/40 border border-cyan-800/40 flex items-center justify-center text-cyan-400 font-bold text-xs shrink-0">
+                          RN
+                        </div>
+                      )}
+                      <div className="truncate">
+                        <div className="truncate">{guide.title}</div>
+                        <span className="text-[11px] text-slate-500 font-mono block">
+                          slug: {guide.slug}
+                        </span>
+                      </div>
+                    </div>
                   </td>
 
                   <td className="py-3.5 px-4 font-sans text-xs text-slate-300">

@@ -43,13 +43,26 @@ export function NetworkOverview({ network }: NetworkOverviewProps) {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            {network.name}
-          </h1>
+          <div className="flex items-center gap-4">
+            {network.logoUrl ? (
+              <div className="w-14 h-14 rounded-2xl bg-[#070b16] border border-cyan-500/30 p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(6,182,212,0.2)]">
+                <img
+                  src={network.logoUrl}
+                  alt={`${network.name} logo`}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ) : null}
 
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
-            {network.consensus} architecture running on {network.layer}.
-          </p>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                {network.name}
+              </h1>
+              <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed mt-1">
+                {network.consensus} architecture running on {network.layer}.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Official Quick Links */}

@@ -159,6 +159,7 @@ const CreateNetworkSchema = z.object({
   githubUrl: z.string().url().optional().or(z.literal("")),
   explorerUrl: z.string().url().optional().or(z.literal("")),
   rpcUrl: z.string().url().optional().or(z.literal("")),
+  logoUrl: z.string().optional().or(z.literal("")),
   isFeatured: z.boolean().default(false),
 });
 
@@ -180,6 +181,7 @@ export async function createNetworkAction(formData: FormData) {
     githubUrl: formData.get("githubUrl") || undefined,
     explorerUrl: formData.get("explorerUrl") || undefined,
     rpcUrl: formData.get("rpcUrl") || undefined,
+    logoUrl: formData.get("logoUrl") || undefined,
     isFeatured: formData.get("isFeatured") === "true",
   };
 
@@ -193,6 +195,7 @@ export async function createNetworkAction(formData: FormData) {
       githubUrl: parsed.githubUrl || null,
       explorerUrl: parsed.explorerUrl || null,
       rpcUrl: parsed.rpcUrl || null,
+      logoUrl: parsed.logoUrl || null,
     },
   });
 
@@ -249,6 +252,7 @@ const CreateGuideSchema = z.object({
   categoryId: z.string().min(1, "Please select a category."),
   networkId: z.string().min(1, "Please link a target network."),
   sourceId: z.string().optional(),
+  logoUrl: z.string().optional().or(z.literal("")),
   verificationStatus: z.nativeEnum(VerificationStatus).default(VerificationStatus.OFFICIAL_DOCS_VERIFIED),
   publicationStatus: z.nativeEnum(PublicationStatus).default(PublicationStatus.DRAFT),
 });
@@ -266,6 +270,7 @@ export async function createGuideAction(formData: FormData) {
     categoryId: formData.get("categoryId"),
     networkId: formData.get("networkId"),
     sourceId: formData.get("sourceId") || undefined,
+    logoUrl: formData.get("logoUrl") || undefined,
     verificationStatus: formData.get("verificationStatus") || VerificationStatus.OFFICIAL_DOCS_VERIFIED,
     publicationStatus: formData.get("publicationStatus") || PublicationStatus.DRAFT,
   };
@@ -282,6 +287,7 @@ export async function createGuideAction(formData: FormData) {
       estimatedMinutes: parsed.estimatedMinutes,
       categoryId: parsed.categoryId,
       authorId: session.id,
+      logoUrl: parsed.logoUrl || null,
       verificationStatus: parsed.verificationStatus,
       publicationStatus: parsed.publicationStatus,
       verifiedAt: parsed.verificationStatus === VerificationStatus.SETUP_TESTED || parsed.verificationStatus === VerificationStatus.OFFICIAL_DOCS_VERIFIED ? new Date() : null,

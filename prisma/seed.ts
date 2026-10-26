@@ -144,6 +144,7 @@ async function main() {
       docsUrl: "https://ethereum.org/en/developers/docs/",
       explorerUrl: "https://etherscan.io",
       rpcUrl: "https://eth.llamarpc.com",
+      logoUrl: "/logos/ethereum.svg",
       isFeatured: true,
       sortOrder: 1,
     },
@@ -160,6 +161,7 @@ async function main() {
       websiteUrl: "https://holesky.ethpandaops.io",
       docsUrl: "https://ethereum.org/en/developers/docs/networks/#holesky",
       explorerUrl: "https://holesky.etherscan.io",
+      logoUrl: "/logos/holesky.svg",
       isFeatured: true,
       sortOrder: 2,
     },
@@ -176,6 +178,7 @@ async function main() {
       websiteUrl: "https://arbitrum.io",
       docsUrl: "https://docs.arbitrum.io",
       explorerUrl: "https://arbiscan.io",
+      logoUrl: "/logos/arbitrum.svg",
       isFeatured: true,
       sortOrder: 3,
     },
@@ -192,6 +195,7 @@ async function main() {
       websiteUrl: "https://base.org",
       docsUrl: "https://docs.base.org",
       explorerUrl: "https://basescan.org",
+      logoUrl: "/logos/base.svg",
       isFeatured: true,
       sortOrder: 4,
     },
@@ -208,6 +212,7 @@ async function main() {
       websiteUrl: "https://solana.com",
       docsUrl: "https://docs.solanalabs.com",
       explorerUrl: "https://solscan.io",
+      logoUrl: "/logos/solana.svg",
       isFeatured: true,
       sortOrder: 5,
     },
@@ -217,7 +222,7 @@ async function main() {
   for (const net of networksData) {
     const record = await prisma.network.upsert({
       where: { slug: net.slug },
-      update: { name: net.name, status: net.status, isFeatured: net.isFeatured, sortOrder: net.sortOrder },
+      update: { name: net.name, status: net.status, isFeatured: net.isFeatured, sortOrder: net.sortOrder, logoUrl: net.logoUrl },
       create: net,
     });
     seededNetworks[net.slug] = record.id;

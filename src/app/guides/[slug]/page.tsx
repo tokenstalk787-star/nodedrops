@@ -208,13 +208,26 @@ export default async function GuideDetailPage({
             />
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            {guide.title}
-          </h1>
+          <div className="flex items-start gap-4">
+            {(guide.logoUrl || primaryNetwork?.logoUrl) ? (
+              <div className="w-14 h-14 rounded-2xl bg-[#070b16] border border-cyan-500/30 p-2.5 flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(6,182,212,0.2)] mt-1">
+                <img
+                  src={guide.logoUrl || primaryNetwork?.logoUrl || ""}
+                  alt={`${primaryNetwork?.name || "Runbook"} logo`}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ) : null}
 
-          <p className="text-base sm:text-lg text-slate-300 max-w-4xl leading-relaxed">
-            {guide.summary}
-          </p>
+            <div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                {guide.title}
+              </h1>
+              <p className="text-base sm:text-lg text-slate-300 max-w-4xl leading-relaxed mt-2">
+                {guide.summary}
+              </p>
+            </div>
+          </div>
 
           <ReviewMetadata
             difficulty={guide.difficulty}

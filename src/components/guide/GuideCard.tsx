@@ -45,17 +45,34 @@ export function GuideCard({ guide }: GuideCardProps) {
           />
         </div>
 
-        <CardTitle className="mt-3 text-lg group-hover:text-cyan-300 transition-colors">
-          <Link href={`/guides/${guide.slug}`} className="hover:underline">
-            {guide.title}
-          </Link>
-        </CardTitle>
+        <div className="flex items-center gap-3 mt-3">
+          {guide.logoUrl || primaryNetwork?.logoUrl ? (
+            <div className="w-10 h-10 rounded-xl bg-[#070b16] border border-cyan-500/30 p-1.5 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.15)] group-hover:border-cyan-400/60 group-hover:shadow-[0_0_16px_rgba(6,182,212,0.25)] transition-all">
+              <img
+                src={guide.logoUrl || primaryNetwork?.logoUrl || ""}
+                alt={`${primaryNetwork?.name || "Runbook"} official logo`}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          ) : (
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-950/60 to-purple-950/60 border border-indigo-800/40 flex items-center justify-center text-cyan-400 font-bold text-sm shrink-0">
+              <Server className="w-5 h-5 text-cyan-400" />
+            </div>
+          )}
 
-        <CardDescription className="flex items-center gap-1.5 text-xs text-cyan-400">
-          <Server className="w-3 h-3" />
-          <span>{primaryNetwork?.name || "General Network"}</span>
-          {guide.category && <span className="text-slate-500">• {guide.category.name}</span>}
-        </CardDescription>
+          <div className="min-w-0">
+            <CardTitle className="text-lg group-hover:text-cyan-300 transition-colors leading-snug line-clamp-1">
+              <Link href={`/guides/${guide.slug}`} className="hover:underline">
+                {guide.title}
+              </Link>
+            </CardTitle>
+
+            <CardDescription className="flex items-center gap-1.5 text-xs text-cyan-400 truncate">
+              <span>{primaryNetwork?.name || "General Network"}</span>
+              {guide.category && <span className="text-slate-500">• {guide.category.name}</span>}
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
 
       <CardContent className="flex-1">

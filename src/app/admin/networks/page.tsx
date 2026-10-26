@@ -69,15 +69,30 @@ export default async function AdminNetworksPage() {
               {networks.map((net) => (
                 <tr key={net.id} className="hover:bg-slate-800/20 transition-colors">
                   <td className="py-3.5 px-4 font-sans font-semibold text-white">
-                    <div className="flex items-center gap-2">
-                      <span>{net.name}</span>
-                      <span className="text-cyan-400 text-xs font-mono font-normal">
-                        ({net.symbol})
-                      </span>
+                    <div className="flex items-center gap-3">
+                      {net.logoUrl ? (
+                        <img
+                          src={net.logoUrl}
+                          alt={net.name}
+                          className="w-8 h-8 rounded-lg object-contain bg-[#070b16] border border-cyan-500/30 p-1 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.15)]"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-lg bg-cyan-950/40 border border-cyan-800/40 flex items-center justify-center text-cyan-400 font-bold text-xs shrink-0">
+                          {net.symbol.slice(0, 2)}
+                        </div>
+                      )}
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span>{net.name}</span>
+                          <span className="text-cyan-400 text-xs font-mono font-normal">
+                            ({net.symbol})
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-slate-500 font-mono block">
+                          slug: {net.slug}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[11px] text-slate-500 font-mono block">
-                      slug: {net.slug}
-                    </span>
                   </td>
 
                   <td className="py-3.5 px-4">

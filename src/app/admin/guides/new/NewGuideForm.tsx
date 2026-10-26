@@ -183,6 +183,20 @@ export function NewGuideForm({ networks, categories, sources }: NewGuideFormProp
           </div>
         </div>
 
+        {/* Custom / Official Logo URL */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-200">Custom Runbook / Project Logo URL (Optional)</label>
+          <input
+            type="text"
+            name="logoUrl"
+            placeholder="e.g. /logos/arbitrum.svg or https://..."
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b101d] border border-slate-800 text-white text-xs sm:text-sm font-mono placeholder:text-slate-600 focus:outline-none focus:border-cyan-500"
+          />
+          <p className="text-[11px] text-slate-500">
+            Leave blank to automatically inherit the linked target network&apos;s official project logo.
+          </p>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-slate-200">Difficulty</label>

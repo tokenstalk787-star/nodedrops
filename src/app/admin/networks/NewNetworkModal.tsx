@@ -163,6 +163,19 @@ export function NewNetworkModal() {
                 </div>
               </div>
 
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-200">Official Project Logo URL</label>
+                <input
+                  type="text"
+                  name="logoUrl"
+                  placeholder="/logos/ethereum.svg or https://example.com/logo.svg"
+                  className="w-full px-3 py-2 rounded-xl bg-[#0b101d] border border-slate-800 text-white font-mono"
+                />
+                <p className="text-[11px] text-slate-400">
+                  Provide a local asset path (e.g. <code className="text-cyan-400">/logos/ethereum.svg</code>) or a secure HTTPS URL for the project logo.
+                </p>
+              </div>
+
               <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-800">
                 <Button type="button" variant="ghost" size="sm" onClick={() => setIsOpen(false)}>
                   Cancel

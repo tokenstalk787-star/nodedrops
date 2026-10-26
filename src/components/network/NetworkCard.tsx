@@ -41,15 +41,32 @@ export function NetworkCard({ network }: NetworkCardProps) {
           <span className="text-xs font-mono text-cyan-400 font-bold">{network.symbol}</span>
         </div>
 
-        <CardTitle className="mt-3 text-lg group-hover:text-cyan-300 transition-colors">
-          <Link href={`/networks/${network.slug}`} className="hover:underline">
-            {network.name}
-          </Link>
-        </CardTitle>
+        <div className="flex items-center gap-3 mt-3">
+          {network.logoUrl ? (
+            <div className="w-10 h-10 rounded-xl bg-[#070b16] border border-cyan-500/30 p-1.5 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.15)] group-hover:border-cyan-400/60 group-hover:shadow-[0_0_16px_rgba(6,182,212,0.25)] transition-all">
+              <img
+                src={network.logoUrl}
+                alt={`${network.name} official logo`}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          ) : (
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-950/60 to-blue-950/60 border border-cyan-800/40 flex items-center justify-center text-cyan-400 font-bold text-sm shrink-0">
+              {network.symbol.slice(0, 2)}
+            </div>
+          )}
 
-        <CardDescription>
-          {network.consensus} • {network.layer}
-        </CardDescription>
+          <div className="min-w-0">
+            <CardTitle className="text-lg group-hover:text-cyan-300 transition-colors leading-snug truncate">
+              <Link href={`/networks/${network.slug}`} className="hover:underline">
+                {network.name}
+              </Link>
+            </CardTitle>
+            <CardDescription className="text-xs">
+              {network.consensus} • {network.layer}
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-3 flex-1">
