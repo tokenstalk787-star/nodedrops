@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { NetworkCard, NetworkWithRelations } from "./NetworkCard";
 import { Pagination } from "@/components/ui/Pagination";
@@ -14,7 +14,7 @@ export interface NetworkListProps {
   currentPage: number;
 }
 
-export function NetworkList({
+function NetworkListInternal({
   networks,
   total,
   totalPages,
@@ -77,5 +77,21 @@ export function NetworkList({
         </div>
       )}
     </div>
+  );
+}
+
+export function NetworkList(props: NetworkListProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-64 rounded-2xl bg-[#0b101d] border border-slate-800" />
+          ))}
+        </div>
+      }
+    >
+      <NetworkListInternal {...props} />
+    </Suspense>
   );
 }

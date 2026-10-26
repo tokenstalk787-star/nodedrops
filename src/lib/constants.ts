@@ -26,7 +26,7 @@ export const FOOTER_LINKS = {
     { label: "Storage Calculator", href: "/tools?tab=storage" },
     { label: "Bandwidth Planner", href: "/tools?tab=bandwidth" },
     { label: "Cost Estimator", href: "/tools?tab=cost" },
-    { label: "Deployment Checklist", href: "/tools?tab=checklist" },
+    { label: "Deployment Checklist", href: "/tools?tab=deployment" },
   ],
   platform: [
     { label: "About NodeDrops", href: "/about" },

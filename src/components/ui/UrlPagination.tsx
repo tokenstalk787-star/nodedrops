@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Pagination } from "./Pagination";
 
@@ -10,7 +10,7 @@ export interface UrlPaginationProps {
   className?: string;
 }
 
-export function UrlPagination({
+function UrlPaginationInternal({
   currentPage,
   totalPages,
   className,
@@ -32,5 +32,15 @@ export function UrlPagination({
       onPageChange={handlePageChange}
       className={className}
     />
+  );
+}
+
+export function UrlPagination(props: UrlPaginationProps) {
+  return (
+    <Suspense
+      fallback={<div className="h-10 w-48 mx-auto rounded-xl bg-slate-900 border border-slate-800 animate-pulse" />}
+    >
+      <UrlPaginationInternal {...props} />
+    </Suspense>
   );
 }

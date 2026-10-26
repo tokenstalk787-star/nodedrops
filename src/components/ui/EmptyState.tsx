@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { FolderSearch } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./Button";
@@ -8,6 +9,7 @@ export interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   description: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
 }
 
@@ -16,6 +18,7 @@ export function EmptyState({
   title,
   description,
   actionLabel,
+  actionHref,
   onAction,
   className,
   ...props
@@ -37,7 +40,14 @@ export function EmptyState({
       <p className="text-xs sm:text-sm text-slate-400 max-w-sm mt-1.5 mb-6 leading-relaxed">
         {description}
       </p>
-      {actionLabel && onAction && (
+      {actionLabel && actionHref && (
+        <Link href={actionHref}>
+          <Button variant="secondary" size="sm">
+            {actionLabel}
+          </Button>
+        </Link>
+      )}
+      {actionLabel && !actionHref && onAction && (
         <Button variant="secondary" size="sm" onClick={onAction}>
           {actionLabel}
         </Button>

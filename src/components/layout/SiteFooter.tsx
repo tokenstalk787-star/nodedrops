@@ -1,12 +1,21 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FOOTER_LINKS, SITE_METADATA } from "@/lib/constants";
 import { Logo } from "@/components/ui/Logo";
 import { Badge } from "@/components/ui/Badge";
 import { ShieldAlert } from "lucide-react";
 
 export function SiteFooter() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  // Hide public footer inside administrative CMS routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <footer className="border-t border-slate-800/80 bg-[#07090f] text-slate-400">

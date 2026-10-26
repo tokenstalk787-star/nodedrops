@@ -124,7 +124,7 @@ export default async function GuidesPage({
           title="No Guides Found"
           description="We could not find any published runbooks matching your search and filter criteria. Try adjusting the difficulty or network filter."
           actionLabel="Reset Filters"
-          onAction={() => {}}
+          actionHref="/guides"
         />
       )}
     </div>

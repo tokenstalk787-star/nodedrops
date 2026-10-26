@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
@@ -57,7 +57,9 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
 
         {/* Login Card Form */}
         <div className="p-6 sm:p-8 rounded-2xl border border-slate-800 bg-[#070b16] shadow-2xl backdrop-blur-xl">
-          <LoginForm returnUrl={returnUrl} />
+          <Suspense fallback={<div className="h-64 w-full rounded-2xl bg-[#0b101d] animate-pulse" />}>
+            <LoginForm returnUrl={returnUrl} />
+          </Suspense>
         </div>
 
         {/* Security Notice */}

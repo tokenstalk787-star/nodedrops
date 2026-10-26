@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Search, X, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ export interface SearchInputProps {
   className?: string;
 }
 
-export function SearchInput({ initialQuery = "", className }: SearchInputProps) {
+function SearchInputInternal({ initialQuery = "", className }: SearchInputProps) {
   const router = useRouter();
   const pathname = usePathname() || "/search";
   const searchParams = useSearchParams();
@@ -129,5 +129,15 @@ export function SearchInput({ initialQuery = "", className }: SearchInputProps) 
         ))}
       </div>
     </div>
+  );
+}
+
+export function SearchInput(props: SearchInputProps) {
+  return (
+    <Suspense
+      fallback={<div className="h-14 w-full rounded-2xl bg-[#070b16] border border-slate-800 animate-pulse" />}
+    >
+      <SearchInputInternal {...props} />
+    </Suspense>
   );
 }

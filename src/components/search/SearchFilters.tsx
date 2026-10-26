@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Layers, Server, BookOpen, Grid } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ export interface SearchFiltersProps {
   };
 }
 
-export function SearchFilters({ currentType, counts }: SearchFiltersProps) {
+function SearchFiltersInternal({ currentType, counts }: SearchFiltersProps) {
   const router = useRouter();
   const pathname = usePathname() || "/search";
   const searchParams = useSearchParams();
@@ -92,5 +92,15 @@ export function SearchFilters({ currentType, counts }: SearchFiltersProps) {
         );
       })}
     </div>
+  );
+}
+
+export function SearchFilters(props: SearchFiltersProps) {
+  return (
+    <Suspense
+      fallback={<div className="h-10 w-full rounded-xl bg-slate-900 border border-slate-800 animate-pulse" />}
+    >
+      <SearchFiltersInternal {...props} />
+    </Suspense>
   );
 }

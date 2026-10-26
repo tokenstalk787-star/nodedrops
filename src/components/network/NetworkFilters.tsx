@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Filter, RotateCcw } from "lucide-react";
 import { Select } from "@/components/ui/Select";
@@ -12,7 +12,7 @@ export interface NetworkFiltersProps {
   hideTypeFilter?: boolean;
 }
 
-export function NetworkFilters({
+function NetworkFiltersInternal({
   categories,
   nodeRoles,
   hideTypeFilter = false,
@@ -53,7 +53,7 @@ export function NetworkFilters({
     <div className="p-4 rounded-xl bg-[#0b101d] border border-slate-800 space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider font-mono">
-          <Filter className="w-3.5 h-3.5 text-cyan-400" /> Filter & Sort
+          <Filter className="w-3.5 h-3.5 text-cyan-400" /> Filter &amp; Sort
         </span>
         {hasActiveFilters && (
           <Button
@@ -119,5 +119,15 @@ export function NetworkFilters({
         />
       </div>
     </div>
+  );
+}
+
+export function NetworkFilters(props: NetworkFiltersProps) {
+  return (
+    <Suspense
+      fallback={<div className="h-28 w-full rounded-xl bg-[#0b101d] border border-slate-800 animate-pulse" />}
+    >
+      <NetworkFiltersInternal {...props} />
+    </Suspense>
   );
 }

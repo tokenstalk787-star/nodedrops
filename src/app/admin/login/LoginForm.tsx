@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React, { useActionState, useEffect } from "react";
 import { loginAdminAction } from "@/lib/actions/admin.actions";
 import { Button } from "@/components/ui/Button";
-import { AlertCircle, Lock, Mail, ArrowRight } from "lucide-react";
+import { AlertCircle, Lock, Mail, ArrowRight, CheckCircle2 } from "lucide-react";
 
 interface LoginFormProps {
   returnUrl?: string;
@@ -12,10 +12,26 @@ interface LoginFormProps {
 export function LoginForm({ returnUrl = "/admin" }: LoginFormProps) {
   const [state, formAction, isPending] = useActionState(loginAdminAction, null);
 
+  useEffect(() => {
+    if (state?.success && state?.redirectUrl) {
+      window.location.href = state.redirectUrl;
+    }
+  }, [state]);
+
+  const isRedirecting = state?.success === true;
+
   return (
     <form action={formAction} className="space-y-4">
       {/* Return URL hidden input */}
       <input type="hidden" name="returnUrl" value={returnUrl} />
+
+      {/* Success alert */}
+      {state?.success && (
+        <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span className="leading-relaxed">Authentication successful. Redirecting to admin console...</span>
+        </div>
+      )}
 
       {/* Error alert */}
       {state?.error && (
@@ -37,7 +53,8 @@ export function LoginForm({ returnUrl = "/admin" }: LoginFormProps) {
           required
           autoComplete="email"
           placeholder="admin@nodedrops.xyz"
-          className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b101d] border border-slate-800 text-white placeholder-slate-500 text-sm font-mono focus:border-cyan-500 focus:outline-none transition-colors"
+          disabled={isPending || isRedirecting}
+          className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b101d] border border-slate-800 text-white placeholder-slate-500 text-sm font-mono focus:border-cyan-500 focus:outline-none transition-colors disabled:opacity-50"
         />
       </div>
 
@@ -53,7 +70,8 @@ export function LoginForm({ returnUrl = "/admin" }: LoginFormProps) {
           required
           autoComplete="current-password"
           placeholder="••••••••••••"
-          className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b101d] border border-slate-800 text-white placeholder-slate-500 text-sm font-mono focus:border-cyan-500 focus:outline-none transition-colors"
+          disabled={isPending || isRedirecting}
+          className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b101d] border border-slate-800 text-white placeholder-slate-500 text-sm font-mono focus:border-cyan-500 focus:outline-none transition-colors disabled:opacity-50"
         />
       </div>
 
@@ -63,11 +81,15 @@ export function LoginForm({ returnUrl = "/admin" }: LoginFormProps) {
           type="submit"
           variant="primary"
           size="md"
-          isLoading={isPending}
+          isLoading={isPending || isRedirecting}
           rightIcon={<ArrowRight className="w-4 h-4" />}
           className="w-full justify-center"
         >
-          {isPending ? "Authenticating..." : "Sign In to Admin Panel"}
+          {isRedirecting
+            ? "Redirecting..."
+            : isPending
+            ? "Authenticating..."
+            : "Sign In to Admin Panel"}
         </Button>
       </div>
     </form>

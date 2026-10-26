@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Cpu, HardDrive, Network, DollarSign, CheckSquare } from "lucide-react";
 import { HardwareChecklistTool } from "./HardwareChecklistTool";
@@ -16,7 +16,7 @@ interface ToolsHubProps {
   initialTab?: ToolTab;
 }
 
-export function ToolsHub({ initialTab = "hardware" }: ToolsHubProps) {
+function ToolsHubInternal({ initialTab = "hardware" }: ToolsHubProps) {
   const router = useRouter();
   const pathname = usePathname() || "/tools";
   const searchParams = useSearchParams();
@@ -106,5 +106,15 @@ export function ToolsHub({ initialTab = "hardware" }: ToolsHubProps) {
         {activeTab === "deployment" && <DeploymentChecklistTool />}
       </div>
     </div>
+  );
+}
+
+export function ToolsHub(props: ToolsHubProps) {
+  return (
+    <Suspense
+      fallback={<div className="h-96 w-full rounded-2xl bg-[#070b16] border border-slate-800 animate-pulse" />}
+    >
+      <ToolsHubInternal {...props} />
+    </Suspense>
   );
 }

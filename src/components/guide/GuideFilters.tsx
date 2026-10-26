@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Filter, RotateCcw } from "lucide-react";
 import { Select } from "@/components/ui/Select";
@@ -11,7 +11,7 @@ export interface GuideFiltersProps {
   networks: { name: string; slug: string }[];
 }
 
-export function GuideFilters({ categories, networks }: GuideFiltersProps) {
+function GuideFiltersInternal({ categories, networks }: GuideFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -95,5 +95,15 @@ export function GuideFilters({ categories, networks }: GuideFiltersProps) {
         />
       </div>
     </div>
+  );
+}
+
+export function GuideFilters(props: GuideFiltersProps) {
+  return (
+    <Suspense
+      fallback={<div className="h-24 w-full rounded-xl bg-[#0b101d] border border-slate-800 animate-pulse" />}
+    >
+      <GuideFiltersInternal {...props} />
+    </Suspense>
   );
 }

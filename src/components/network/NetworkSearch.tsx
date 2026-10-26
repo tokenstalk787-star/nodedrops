@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ export interface NetworkSearchProps {
   placeholder?: string;
 }
 
-export function NetworkSearch({
+function NetworkSearchInternal({
   className,
   placeholder = "Search networks by name, symbol, consensus, or client...",
 }: NetworkSearchProps) {
@@ -88,5 +88,17 @@ export function NetworkSearch({
         </button>
       </div>
     </form>
+  );
+}
+
+export function NetworkSearch(props: NetworkSearchProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className={cn("h-11 w-full rounded-xl bg-[#0e1424] border border-slate-800 animate-pulse", props.className)} />
+      }
+    >
+      <NetworkSearchInternal {...props} />
+    </Suspense>
   );
 }

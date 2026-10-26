@@ -29,7 +29,10 @@ const LoginSchema = z.object({
   returnUrl: z.string().optional(),
 });
 
-export async function loginAdminAction(prevState: { error?: string } | null, formData: FormData) {
+export async function loginAdminAction(
+  prevState: { error?: string; success?: boolean; redirectUrl?: string } | null,
+  formData: FormData
+) {
   const rawEmail = (formData.get("email") as string) || "";
   const rawPassword = (formData.get("password") as string) || "";
   const rawReturnUrl = (formData.get("returnUrl") as string) || "/admin";
@@ -96,7 +99,7 @@ export async function loginAdminAction(prevState: { error?: string } | null, for
     safeDestination = returnUrl;
   }
 
-  redirect(safeDestination);
+  return { success: true, redirectUrl: safeDestination };
 }
 
 export async function logoutAction() {

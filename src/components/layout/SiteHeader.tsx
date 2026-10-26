@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Terminal, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { DesktopNavigation } from "@/components/navigation/DesktopNavigation";
@@ -14,6 +15,13 @@ export interface SiteHeaderProps {
 }
 
 export function SiteHeader({ className }: SiteHeaderProps) {
+  const pathname = usePathname();
+
+  // Hide public navigation header inside administrative CMS routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <header
       className={cn(
