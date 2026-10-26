@@ -6,6 +6,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildWebSiteSchema } from "@/lib/seo/schema";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/analytics/GoogleTagManager";
+import { UmamiAnalytics } from "@/components/analytics/UmamiAnalytics";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nodedrops.xyz";
 
@@ -88,11 +90,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Preconnect & DNS-Prefetch for low-latency ad assets */}
+        {/* Preconnect & DNS-Prefetch for low-latency ad & analytics assets */}
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://cloud.umami.is" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cloud.umami.is" />
       </head>
       <body className="min-h-screen flex flex-col bg-[#0a0d14] text-[#f1f5f9] antialiased selection:bg-cyan-500/20 selection:text-cyan-300">
+        {/* Google Tag Manager (noscript) */}
+        <GoogleTagManagerNoScript />
+
         {/* Accessibility: Skip to Content Anchor */}
         <a
           href="#main-content"
@@ -104,8 +113,14 @@ export default function RootLayout({
         {/* Global Structured Data */}
         <JsonLd data={buildWebSiteSchema()} />
 
+        {/* Google Tag Manager */}
+        <GoogleTagManager />
+
         {/* Privacy-Preserving GA4 */}
         <GoogleAnalytics />
+
+        {/* Umami Analytics (Cookie-less, Privacy-First) */}
+        <UmamiAnalytics />
 
         {/* Google AdSense Script - lazyOnload eliminates CPU blocking during FCP/LCP for 95+ Mobile Lighthouse */}
         <Script
