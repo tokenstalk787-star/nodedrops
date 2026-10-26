@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -87,12 +88,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google AdSense Site Ownership Verification & Ad Script */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1425431915803453"
-          crossOrigin="anonymous"
-        />
+        {/* Preconnect & DNS-Prefetch for low-latency ad assets */}
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
       </head>
       <body className="min-h-screen flex flex-col bg-[#0a0d14] text-[#f1f5f9] antialiased selection:bg-cyan-500/20 selection:text-cyan-300">
         {/* Accessibility: Skip to Content Anchor */}
@@ -108,6 +106,14 @@ export default function RootLayout({
 
         {/* Privacy-Preserving GA4 */}
         <GoogleAnalytics />
+
+        {/* Google AdSense Script - lazyOnload eliminates CPU blocking during FCP/LCP for 95+ Mobile Lighthouse */}
+        <Script
+          id="google-adsense"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1425431915803453"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
 
         <SiteHeader />
 

@@ -47,6 +47,10 @@ export function NetworkCard({ network }: NetworkCardProps) {
               <img
                 src={network.logoUrl}
                 alt={`${network.name} official logo`}
+                width={40}
+                height={40}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-contain"
               />
             </div>

@@ -93,7 +93,9 @@ export function HomeCapacityWidget() {
             {CAPACITY_PRESETS.map((preset) => (
               <button
                 key={preset.id}
+                type="button"
                 onClick={() => setSelected(preset)}
+                aria-label={`Select ${preset.name} hardware capacity preset`}
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
                   selected.id === preset.id
                     ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]"

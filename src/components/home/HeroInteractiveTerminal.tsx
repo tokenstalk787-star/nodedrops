@@ -109,7 +109,9 @@ export function HeroInteractiveTerminal() {
           {PRESETS.map((p) => (
             <button
               key={p.id}
+              type="button"
               onClick={() => setActivePreset(p)}
+              aria-label={`Switch terminal preset to ${p.name} (${p.symbol})`}
               className={cn(
                 "px-2 py-0.5 rounded text-[10px] font-mono font-medium transition-all",
                 activePreset.id === p.id
@@ -167,8 +169,10 @@ export function HeroInteractiveTerminal() {
           <div className="flex items-center justify-between text-[10px] uppercase font-semibold tracking-wider text-slate-500">
             <span>Telemetry Simulation Feed</span>
             <button
+              type="button"
               onClick={handleSimulate}
               disabled={isRunning}
+              aria-label="Simulate node telemetry ping"
               className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 disabled:opacity-50"
             >
               <Play className={cn("w-3 h-3", isRunning && "animate-spin")} />

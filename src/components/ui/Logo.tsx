@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,12 @@ interface LogoProps {
 }
 
 export function Logo({ className, size = "md", asLink = true }: LogoProps) {
+  const rawId = useId();
+  const safeId = rawId.replace(/[^a-zA-Z0-9]/g, "");
+  const logoGradId = `nd-logo-grad-${safeId}`;
+  const dropFillId = `nd-drop-fill-${safeId}`;
+  const glowId = `nd-glow-${safeId}`;
+
   const sizeClasses = {
     sm: "text-base gap-2",
     md: "text-lg gap-2.5",
@@ -33,19 +39,19 @@ export function Logo({ className, size = "md", asLink = true }: LogoProps) {
           aria-hidden="true"
         >
           <defs>
-            <linearGradient id="nd-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id={logoGradId} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#00f2fe" />
               <stop offset="50%" stopColor="#38bdf8" />
               <stop offset="100%" stopColor="#818cf8" />
             </linearGradient>
 
-            <linearGradient id="nd-drop-fill" x1="50%" y1="0%" x2="50%" y2="100%">
+            <linearGradient id={dropFillId} x1="50%" y1="0%" x2="50%" y2="100%">
               <stop offset="0%" stopColor="#00f2fe" stopOpacity="0.22" />
               <stop offset="60%" stopColor="#3b82f6" stopOpacity="0.10" />
               <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.04" />
             </linearGradient>
 
-            <radialGradient id="nd-glow" cx="50%" cy="60%" r="50%">
+            <radialGradient id={glowId} cx="50%" cy="60%" r="50%">
               <stop offset="0%" stopColor="#00f2fe" stopOpacity="0.3" />
               <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.1" />
               <stop offset="100%" stopColor="#000000" stopOpacity="0" />
@@ -53,13 +59,13 @@ export function Logo({ className, size = "md", asLink = true }: LogoProps) {
           </defs>
 
           {/* Ambient Glow Aura */}
-          <circle cx="64" cy="68" r="48" fill="url(#nd-glow)" />
+          <circle cx="64" cy="68" r="48" fill={`url(#${glowId})`} />
 
           {/* Crystalline Droplet Outer Shell */}
           <path
             d="M 64,15 C 66,17 87,46 97,69 C 105,87 97,105 81,112 C 71,116 57,116 47,112 C 31,105 23,87 31,69 C 41,46 62,17 64,15 Z"
-            fill="url(#nd-drop-fill)"
-            stroke="url(#nd-logo-grad)"
+            fill={`url(#${dropFillId})`}
+            stroke={`url(#${logoGradId})`}
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -100,7 +106,7 @@ export function Logo({ className, size = "md", asLink = true }: LogoProps) {
 
           {/* Center Nexus Core Node */}
           <circle cx="64" cy="66" r="9.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="2.8" />
-          <circle cx="64" cy="66" r="5" fill="url(#nd-logo-grad)" />
+          <circle cx="64" cy="66" r="5" fill={`url(#${logoGradId})`} />
           <circle cx="64" cy="66" r="2.2" fill="#ffffff" />
         </svg>
       </span>

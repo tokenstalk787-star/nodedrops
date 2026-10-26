@@ -10,8 +10,7 @@ import {
 } from "@/lib/repositories/network.repository";
 import { NetworkType } from "@prisma/client";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export const metadata = {
   title: "Blockchain Networks Directory — NodeDrops",

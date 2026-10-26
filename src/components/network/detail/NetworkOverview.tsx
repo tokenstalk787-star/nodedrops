@@ -49,6 +49,10 @@ export function NetworkOverview({ network }: NetworkOverviewProps) {
                 <img
                   src={network.logoUrl}
                   alt={`${network.name} logo`}
+                  width={56}
+                  height={56}
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-contain"
                 />
               </div>

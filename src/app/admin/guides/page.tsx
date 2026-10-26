@@ -83,6 +83,10 @@ export default async function AdminGuidesPage() {
                         <img
                           src={guide.logoUrl || guide.guideNetworks[0]?.network?.logoUrl || ""}
                           alt={guide.title}
+                          width={32}
+                          height={32}
+                          loading="lazy"
+                          decoding="async"
                           className="w-8 h-8 rounded-lg object-contain bg-[#070b16] border border-cyan-500/30 p-1 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.15)]"
                         />
                       ) : (

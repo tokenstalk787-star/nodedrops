@@ -214,6 +214,10 @@ export default async function GuideDetailPage({
                 <img
                   src={guide.logoUrl || primaryNetwork?.logoUrl || ""}
                   alt={`${primaryNetwork?.name || "Runbook"} logo`}
+                  width={56}
+                  height={56}
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-contain"
                 />
               </div>

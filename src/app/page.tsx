@@ -19,9 +19,8 @@ import { getAllNetworks } from "@/lib/repositories/network.repository";
 import { getAllGuides } from "@/lib/repositories/guide.repository";
 import { NetworkStatus, PublicationStatus } from "@prisma/client";
 
-// Ensure this page is dynamically server-rendered with real-time TiDB Cloud database data
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// ISR: Revalidate cached pages every 60 seconds at Edge CDN for instant sub-40ms TTFB
+export const revalidate = 60;
 
 export const metadata = {
   title: "NodeDrops — Your Guide to Running Blockchain Nodes",

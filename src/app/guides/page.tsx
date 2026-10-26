@@ -13,8 +13,7 @@ import {
 import { Difficulty, PublicationStatus } from "@prisma/client";
 import { BookOpen } from "lucide-react";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export const metadata = {
   title: "Node Deployment Runbooks & Guides — NodeDrops",

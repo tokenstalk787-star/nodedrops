@@ -46,7 +46,9 @@ export function InteractiveNetworkShowcase({
         {/* Interactive Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <button
+            type="button"
             onClick={() => setFilterTab("ALL")}
+            aria-label="Show all blockchain networks"
             className={`px-3.5 py-1.5 rounded-xl text-xs font-medium font-mono transition-all whitespace-nowrap ${
               filterTab === "ALL"
                 ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]"
@@ -57,7 +59,9 @@ export function InteractiveNetworkShowcase({
           </button>
 
           <button
+            type="button"
             onClick={() => setFilterTab("MAINNET")}
+            aria-label="Filter to mainnet networks"
             className={`px-3.5 py-1.5 rounded-xl text-xs font-medium font-mono transition-all whitespace-nowrap ${
               filterTab === "MAINNET"
                 ? "bg-blue-500/20 text-blue-300 border border-blue-500/40 shadow-[0_0_12px_rgba(59,130,246,0.2)]"
@@ -68,7 +72,9 @@ export function InteractiveNetworkShowcase({
           </button>
 
           <button
+            type="button"
             onClick={() => setFilterTab("TESTNET")}
+            aria-label="Filter to testnet networks"
             className={`px-3.5 py-1.5 rounded-xl text-xs font-medium font-mono transition-all whitespace-nowrap ${
               filterTab === "TESTNET"
                 ? "bg-violet-500/20 text-violet-300 border border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.2)]"
@@ -79,7 +85,9 @@ export function InteractiveNetworkShowcase({
           </button>
 
           <button
+            type="button"
             onClick={() => setFilterTab("ROLLUP")}
+            aria-label="Filter to rollups and layer 2 networks"
             className={`px-3.5 py-1.5 rounded-xl text-xs font-medium font-mono transition-all whitespace-nowrap ${
               filterTab === "ROLLUP"
                 ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
@@ -98,11 +106,14 @@ export function InteractiveNetworkShowcase({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Quick filter chains..."
+            aria-label="Quick filter blockchain chains by name or symbol"
             className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-[#04060c] border border-slate-800 text-white text-xs placeholder:text-slate-600 focus:outline-none focus:border-cyan-500 transition-colors font-mono"
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => setSearchQuery("")}
+              aria-label="Clear filter search"
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white text-xs"
             >
               ✕

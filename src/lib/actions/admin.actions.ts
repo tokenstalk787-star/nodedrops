@@ -139,7 +139,9 @@ export async function updateNetworkStatusAction(networkId: string, newStatus: Ne
   revalidatePath("/admin/networks");
   revalidatePath("/admin");
   revalidatePath("/networks");
+  revalidatePath("/");
   revalidatePath(`/networks/${network.slug}`);
+  revalidatePath("/");
 
   return { success: true, status: network.status };
 }
@@ -210,6 +212,7 @@ export async function createNetworkAction(formData: FormData) {
   revalidatePath("/admin/networks");
   revalidatePath("/admin");
   revalidatePath("/networks");
+  revalidatePath("/");
 
   return { success: true, networkId: network.id };
 }
@@ -238,6 +241,7 @@ export async function toggleGuidePublicationAction(guideId: string, newStatus: P
   revalidatePath("/admin");
   revalidatePath("/guides");
   revalidatePath(`/guides/${guide.slug}`);
+  revalidatePath("/");
 
   return { success: true, status: guide.publicationStatus };
 }
@@ -319,6 +323,7 @@ export async function createGuideAction(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/guides");
   revalidatePath(`/guides/${guide.slug}`);
+  revalidatePath("/");
 
   redirect("/admin/guides");
 }
