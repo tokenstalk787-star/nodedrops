@@ -79,6 +79,7 @@ export const metadata: Metadata = {
   },
   other: {
     "google-adsense-account": "ca-pub-1425431915803453",
+    "msvalidate.01": "0E50D485483750EFC07DBB8462A3DF64",
   },
 };
 

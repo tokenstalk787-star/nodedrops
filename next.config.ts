@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/bingsiteauth.xml",
+        destination: "/BingSiteAuth.xml",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
