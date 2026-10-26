@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1222"/>
+      <stop offset="50%" stop-color="#070b14"/>
+      <stop offset="100%" stop-color="#03050a"/>
+    </linearGradient>
+
+    <!-- Border Gradient -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- Primary Neon Stream Gradient (Cyan to Blue to Purple) -->
+    <linearGradient id="streamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="50%" stop-color="#4facfe"/>
+      <stop offset="100%" stop-color="#9055ff"/>
+    </linearGradient>
+
+    <!-- Droplet Body Gradient -->
+    <linearGradient id="dropFill" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.25"/>
+      <stop offset="60%" stop-color="#3b82f6" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.04"/>
+    </linearGradient>
+
+    <!-- Node Glow Filters -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.5" result="blur1"/>
+      <feGaussianBlur stdDeviation="7" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <radialGradient id="ambientAura" cx="50%" cy="58%" r="55%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.35"/>
+      <stop offset="45%" stop-color="#3b82f6" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Base Icon Canvas / Squircle (for app icon & favicon) -->
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect width="126" height="126" x="1" y="1" rx="27" fill="none" stroke="url(#borderGrad)" stroke-width="1.5"/>
+
+  <!-- Ambient Glow Behind Droplet -->
+  <circle cx="64" cy="68" r="46" fill="url(#ambientAura)"/>
+
+  <!-- Outer Stylized Droplet Shell -->
+  <path d="M 64,15 C 66,17 87,46 97,69 C 105,87 97,105 81,112 C 71,116 57,116 47,112 C 31,105 23,87 31,69 C 41,46 62,17 64,15 Z"
+        fill="url(#dropFill)"
+        stroke="url(#streamGrad)"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#neonGlow)"/>
+
+  <!-- Internal Facet Reflections (Crystalline depth) -->
+  <path d="M 64,18 L 64,68 L 31,69 C 41,46 62,17 64,18 Z"
+        fill="#ffffff"
+        fill-opacity="0.04"/>
+
+  <!-- Blockchain Network Grid / Interconnected Node Lattice -->
+  <!-- Connection Link: Apex -> Core -->
+  <line x1="64" y1="32" x2="64" y2="66" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+  
+  <!-- Connection Link: Core -> Bottom Left -->
+  <line x1="64" y1="66" x2="44" y2="88" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+  
+  <!-- Connection Link: Core -> Bottom Right -->
+  <line x1="64" y1="66" x2="84" y2="88" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- Connection Link: Bottom Left -> Bottom Right (Base Consensus Lattice) -->
+  <line x1="44" y1="88" x2="84" y2="88" stroke="#818cf8" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2 3" opacity="0.75"/>
+
+  <!-- Connection Link: Apex -> Bottom Left & Right (Outer Pyramidal Crystalline Edges) -->
+  <line x1="64" y1="32" x2="44" y2="88" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.4"/>
+  <line x1="64" y1="32" x2="84" y2="88" stroke="#c084fc" stroke-width="1.5" stroke-opacity="0.4"/>
+
+  <!-- Nodes (Vertices) -->
+  <!-- Bottom Left Node (Consensus Client) -->
+  <circle cx="44" cy="88" r="6" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/>
+  <circle cx="44" cy="88" r="2.5" fill="#ffffff"/>
+
+  <!-- Bottom Right Node (Execution Client) -->
+  <circle cx="84" cy="88" r="6" fill="#581c87" stroke="#c084fc" stroke-width="2"/>
+  <circle cx="84" cy="88" r="2.5" fill="#ffffff"/>
+
+  <!-- Apex Beacon Node (Network Ingress / Inflow) -->
+  <circle cx="64" cy="32" r="6.5" fill="#0e7490" stroke="#00f2fe" stroke-width="2.2" filter="url(#neonGlow)"/>
+  <circle cx="64" cy="32" r="3" fill="#ffffff"/>
+
+  <!-- Central Nexus Core Node (Decentralized Master Engine) -->
+  <circle cx="64" cy="66" r="9" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" filter="url(#neonGlow)"/>
+  <circle cx="64" cy="66" r="4.5" fill="url(#streamGrad)"/>
+  <circle cx="64" cy="66" r="2" fill="#ffffff"/>
+
+  <!-- Tiny Satellite Orbiting Nodes (Signifying dynamic block production) -->
+  <circle cx="50" cy="48" r="1.5" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="78" cy="52" r="1.8" fill="#a78bfa" opacity="0.85"/>
+  <circle cx="64" cy="100" r="1.5" fill="#00f2fe" opacity="0.7"/>
+</svg>
