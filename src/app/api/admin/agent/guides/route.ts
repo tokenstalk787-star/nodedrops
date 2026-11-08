@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_BODY_BYTES = 1_000_000;
-const httpsUrl = z.string().url().refine((value) => new URL(value).protocol === "https:");
+const httpsUrl = z.string().url().refine((value) => value.startsWith("https://"), "Only HTTPS URLs are accepted.");
 
 const Schema = z.object({
   title: z.string().trim().min(5).max(180),
