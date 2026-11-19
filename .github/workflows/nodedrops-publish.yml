@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "content/guides/**/*.md"
+      - "content/guides/**"
 
 permissions:
   contents: read
