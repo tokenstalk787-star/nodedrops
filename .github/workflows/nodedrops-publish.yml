@@ -1,0 +1,98 @@
+name: NodeDrops GitHub Auto-Publisher
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "content/guides/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nodedrops-publisher-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish-guides:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync changed guide files to NodeDrops
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+          PUBLISH_URL: ${{ secrets.NODEDROPS_PUBLISH_URL }}
+          PUBLISH_SECRET: ${{ secrets.NODEDROPS_PUBLISH_SECRET }}
+        run: |
+          node <<'NODE'
+          const { execFileSync } = require("node:child_process");
+          const { createHmac } = require("node:crypto");
+
+          const before = process.env.BEFORE_SHA;
+          const after = process.env.AFTER_SHA;
+          const base = /^0+$/.test(before) ? `${after}^` : before;
+          const rawDiff = execFileSync("git", ["diff", "--name-status", "-M", base, after], { encoding: "utf8" });
+
+          const files = [];
+          for (const line of rawDiff.split(/\r?\n/).filter(Boolean)) {
+            const [status, firstPath, secondPath] = line.split("\t");
+            if (status.startsWith("R")) {
+              if (firstPath) files.push({ path: firstPath, status: "deleted" });
+              if (secondPath) files.push({ path: secondPath, status: "upsert" });
+            } else if (status === "D") {
+              files.push({ path: firstPath, status: "deleted" });
+            } else if (status.startsWith("A") || status.startsWith("M")) {
+              files.push({ path: firstPath, status: "upsert" });
+            }
+          }
+
+          const eligible = files.filter((file) =>
+            /^content\/guides\/[a-z0-9]+(?:-[a-z0-9]+)*\.md$/.test(file.path)
+          );
+          if (eligible.length === 0) {
+            console.log("No publishable guide files changed; nothing to sync.");
+            process.exit(0);
+          }
+          if (eligible.length > 30) {
+            console.error("Too many changed guide files in one push (maximum 30). Split the commit.");
+            process.exit(1);
+          }
+          if (!process.env.PUBLISH_URL || !process.env.PUBLISH_SECRET) {
+            console.error("Set NODEDROPS_PUBLISH_URL and NODEDROPS_PUBLISH_SECRET in repository Actions secrets.");
+            process.exit(1);
+          }
+
+          const payload = JSON.stringify({
+            repository: process.env.REPOSITORY,
+            commit: after,
+            files: eligible,
+          });
+          const signature = "sha256=" + createHmac("sha256", process.env.PUBLISH_SECRET).update(payload).digest("hex");
+
+          async function send() {
+            const response = await fetch(process.env.PUBLISH_URL, {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                "x-nodedrops-signature": signature,
+              },
+              body: payload,
+            });
+            const text = await response.text();
+            console.log(`Publisher responded ${response.status}: ${text}`);
+            if (!response.ok) process.exitCode = 1;
+          }
+
+          send().catch((error) => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE

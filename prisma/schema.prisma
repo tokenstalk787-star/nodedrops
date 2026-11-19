@@ -195,6 +195,9 @@ model Guide {
   verifiedAt         DateTime?
   viewCount          Int                @default(0)
   logoUrl            String?
+  githubRepository    String?
+  githubPath         String?
+  githubCommit       String?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 
@@ -209,6 +212,7 @@ model Guide {
   @@index([publicationStatus])
   @@index([authorId])
   @@index([categoryId])
+  @@unique([githubRepository, githubPath])
 }
 
 model Source {

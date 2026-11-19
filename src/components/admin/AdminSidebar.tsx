@@ -14,6 +14,7 @@ import {
   X,
   FileCheck2,
   Globe,
+  GitBranch,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Badge } from "@/components/ui/Badge";
@@ -39,6 +40,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
     { label: "Categories", href: "/admin/categories", icon: <Layers className="w-4 h-4" /> },
     { label: "Upstream Sources", href: "/admin/sources", icon: <ExternalLink className="w-4 h-4" /> },
     { label: "Review & Submissions", href: "/admin/reviews", icon: <FileCheck2 className="w-4 h-4" /> },
+    { label: "GitHub Publisher", href: "/admin/github-publisher", icon: <GitBranch className="w-4 h-4" /> },
   ];
 
   return (
