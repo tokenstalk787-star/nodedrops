@@ -1,8 +1,4 @@
-import {
-  NetworkStatus,
-  PublicationStatus,
-  VerificationStatus,
-} from "@prisma/client";
+import { NetworkStatus, PublicationStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import {
   parsePublisherMarkdown,
