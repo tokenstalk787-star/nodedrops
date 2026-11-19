@@ -1,8 +1,3 @@
-# GitHub Auto-Publisher Guide Template
-
-Copy this file, rename it to `content/guides/<guide-slug>.md`, and replace all example values.
-Never publish the template itself.
-
 ---
 title: "Example Network Full Node Guide"
 slug: example-network-full-node
@@ -32,6 +27,8 @@ sources:
     sourceType: OFFICIAL_DOCS
     notes: "Replace with the exact pages used to verify the instructions."
 ---
+
+<!-- TEMPLATE: copy this file to a slug-named .md file, replace all example values, and do not publish this template. -->
 
 # Overview
 
