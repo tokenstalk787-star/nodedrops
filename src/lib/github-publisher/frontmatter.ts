@@ -1,12 +1,5 @@
 import { z } from "zod";
-import {
-  Difficulty,
-  NetworkStatus,
-  NetworkType,
-  PublicationStatus,
-  SourceType,
-  VerificationStatus,
-} from "@prisma/client";
+import { Difficulty, NetworkType, SourceType, VerificationStatus } from "@prisma/client";
 
 const httpsUrl = z.string().url().refine((value) => value.startsWith("https://"), "URLs must use HTTPS.");
 
@@ -117,4 +110,3 @@ export function publisherPathToSlug(path: string): string | null {
   return match?.[1] ?? null;
 }
 
-export { NetworkStatus, PublicationStatus };
