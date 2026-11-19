@@ -88,10 +88,7 @@ async function syncGuide(repository: string, commit: string, path: string) {
     const [category, existingNetwork, existingBySource, slugOwner] = await Promise.all([
       tx.category.upsert({
         where: { slug: data.categorySlug },
-        update: {
-          name: data.categoryName ?? data.categorySlug.replace(/-/g, " "),
-          description: data.categoryDescription,
-        },
+        update: {},
         create: {
           name: data.categoryName ?? data.categorySlug.replace(/-/g, " "),
           slug: data.categorySlug,
