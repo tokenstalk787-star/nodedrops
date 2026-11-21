@@ -196,6 +196,10 @@ async function syncGuide(repository: string, commit: string, path: string) {
     });
 
     return { guide, networkSlug: data.network.slug };
+  }, {
+    // TiDB Cloud can be slower on multi-table writes; Prisma's default is 5 seconds.
+    maxWait: 10_000,
+    timeout: 15_000,
   });
 
   revalidateGuidePaths(result.guide.slug, result.networkSlug);
